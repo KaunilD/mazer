@@ -1,11 +1,25 @@
 cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# Qt5
-find_package(Qt5 COMPONENTS REQUIRED Core Gui Widgets)
-if(Qt5_DIR)
-	message(Qt5_DIR " ${Qt5_DIR}")
+# Make this a GUI application on Windows
+if(WIN32)
+  set(CMAKE_WIN32_EXECUTABLE ON)
 endif()
+
+
+# Qt5
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+
+find_package(Qt5 COMPONENTS REQUIRED Core Gui Widgets)
+if(${Qt5_FOUND})
+	message("Found QT5 at: " ${Qt5_DIR})
+else()
+	message("Couldn't find Qt. ABorting.")
+endif()
+
 
 # OpenGL
 find_package(OpenGL REQUIRED)
@@ -14,9 +28,28 @@ include_directories("${CMAKE_SOURCE_DIR}/third-party/glew-2.1.0/include")
 include_directories("${CMAKE_SOURCE_DIR}/third-party/glm")
 link_directories("${CMAKE_SOURCE_DIR}/third-party/glew-2.1.0/lib/Release/x64/")
 
-
-add_executable(mazer
+set(SRCS
 	"main.cpp"
+	"mainwindow.cpp"
+)
+
+set(UI
+	"mainwindow.ui"
+)
+
+set(HEADERS
+	"mainwindow.hpp"
+)
+
+qt5_wrap_ui(ui_wrap ${UI})
+qt5_wrap_cpp(moc_sources ${HEADERS})
+
+
+add_executable(mazer WIN32
+	${SRCS}
+	${HEADERS}
+	${moc_sources}
+	${ui_wrap}
 )
 
 target_include_directories(
@@ -35,9 +68,15 @@ target_link_libraries(
 )
 
 
+# auto copy dlls if on windows
+if(WIN32)
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Core> $<TARGET_FILE_DIR:${PROJECT_NAME}>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Gui> $<TARGET_FILE_DIR:${PROJECT_NAME}>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE_DIR:${PROJECT_NAME}> )
+endif(WIN32)
 
-
+# set output directory
 set_target_properties(mazer PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib" )
 set_target_properties(mazer PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib" )
 set_target_properties(mazer PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib" )
-set_target_properties(mazer PROPERTIES OUTPUT_NAME "${PLUGIN_OUTPUT_FILENAME}")

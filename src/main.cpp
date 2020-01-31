@@ -1,10 +1,11 @@
-#include<iostream>
-using std::cout;
+#include "mainwindow.hpp"
+#include <QApplication>
 
-int main() {
+int main(int argc, char *argv[])
+{
+	QApplication a(argc, argv);
+	MainWindow w;
+	w.show();
 
-	while (true) {
-
-	}
-	return 0;
+	return a.exec();
 }
