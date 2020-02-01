@@ -52,7 +52,8 @@ set(SRCS
 	"main.cpp"
 	"mainwindow.cpp"
 	"mazeglwidget.cpp"
-	"objectLoader.cpp"
+	"objLoader.cpp"
+	"shaderprogram.cpp"
 )
 
 set(UI
@@ -62,8 +63,9 @@ set(UI
 set(HEADERS
 	"mainwindow.hpp"
 	"mazeglwidget.hpp"
-	"objectLoader.hpp"
+	"objLoader.hpp"
 	"vertex.hpp"
+	"shaderprogram.hpp"
 )
 
 qt5_wrap_ui(ui_wrap ${UI})
@@ -102,3 +104,4 @@ endif(WIN32)
 set_target_properties(mazer PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib" )
 set_target_properties(mazer PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib" )
 set_target_properties(mazer PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib" )
+set_target_properties(mazer PROPERTIES OUTPUT_NAME "${PLUGIN_OUTPUT_FILENAME}")

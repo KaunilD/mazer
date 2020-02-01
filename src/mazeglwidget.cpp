@@ -1,38 +1,46 @@
 #include "mazeglwidget.hpp"
 
-MazeGLWidget::MazeGLWidget(QWidget *parent): QOpenGLWidget(parent)
+MazeGLWidget::MazeGLWidget(QWidget *parent) : QOpenGLWidget(parent)
 {
-
+	QSurfaceFormat format;
+	format.setSamples(16);
+	this->setFormat(format);
 }
 
 
-MazeGLWidget::~MazeGLWidget()
-{
-
-}
+MazeGLWidget::~MazeGLWidget() {}
 
 void MazeGLWidget::initializeGL() {
+	initializeOpenGLFunctions();
+
+	glDepthMask(GL_TRUE);
+	/* clear the depth */
+	//glClearDepth(1.0f);
+	/* enable the depth test */
 	glEnable(GL_DEPTH_TEST);
+	/* enable cullmode CCW (counter clockwise) */
+	glEnable(GL_CULL_FACE);
+	/* sets the color the screen needs to be cleared with */
+	glClearColor(0.392f, 0.584f, 0.929f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	playerObjShader = new ShaderProgram(this);
+	playerObjShader->loadShaders(
+		"C:\\Users\\dhruv\\Development\\git\\mazer\\src\\resources\\glsl\\object_vs.glsl",
+		"C:\\Users\\dhruv\\Development\\git\\mazer\\src\\resources\\glsl\\object_fs.glsl"
+	);
 
-	glEnable(GL_DEPTH_TEST | GL_LIGHT0 | GL_LIGHTING | GL_COLOR_MATERIAL);
-	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	playerObj = new ObjLoader();
+	playerObj->loadObject("C:\\Users\\dhruv\\Development\\git\\mazer\\src\\resources\\slr_camera.obj");
+	playerObj->setupModelMatrix();
+	playerObj->setupGLBuffers();
+
 }
 
 void MazeGLWidget::paintGL() {
-	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glBegin(GL_TRIANGLES);
-		glColor3f(1.0, 0.0, 0.0);
-		glVertex3f(-0.5, -0.5, 0);
-		glColor3f(0.0, 1.0, 0.0);
-		glVertex3f(0.5, -0.5, 0);
-		glColor3f(0.0, 0.0, 1.0);
-		glVertex3f(0.0, 0.5, 0);
-	glEnd();
-
+	playerObj->attachShaders(playerObjShader);
+	playerObj->render();
 }
 
 void MazeGLWidget::resizeGL(int w, int h) {

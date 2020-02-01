@@ -1,0 +1,14 @@
+<RCC>
+  <qresource prefix="resources/">
+    <file alias="fragShader">fragment.fsh</file>
+    <file alias="vertexShader">vertex.vsh</file>
+    <file alias="Cube">cube.obj</file>
+    <file alias="Sphere">sphere.obj</file>
+    <file alias="Terrain_Texture">terrain.bmp</file>
+    <file alias="Building">building.obj</file>
+    <file alias="Pumpkin">pumpkin.obj</file>
+    <file alias="Coin">coin.obj</file>
+    <file alias="Texture">default.jpg</file>
+    <file>level.lvl</file>
+  </qresource>
+</RCC>
