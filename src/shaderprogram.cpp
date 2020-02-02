@@ -7,7 +7,7 @@ ShaderProgram::ShaderProgram(QObject *parent){
 };
 
 void ShaderProgram::loadShaders(const char * vsPath, const char * fsPath) {
-	program->addShaderFromSourceFile(QOpenGLShader::Vertex, vsPath);
-	program->addShaderFromSourceFile(QOpenGLShader::Fragment, fsPath);
+	program->addShaderFromSourceFile(QOpenGLShader::Vertex, QString(vsPath));
+	program->addShaderFromSourceFile(QOpenGLShader::Fragment, QString(fsPath));
 	program->link();
 }

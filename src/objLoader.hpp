@@ -33,7 +33,7 @@ public:
 
 	ObjLoader();
 	~ObjLoader();
-	void loadObject(const char * obj_path);
+	void loadObject(QString obj_path);
 
 	QOpenGLShaderProgram * program;
 	GLuint shaderID;

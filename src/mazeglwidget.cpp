@@ -27,12 +27,12 @@ void MazeGLWidget::initializeGL() {
 
 	playerObjShader = new ShaderProgram(this);
 	playerObjShader->loadShaders(
-		"C:\\Users\\dhruv\\Development\\git\\mazer\\src\\resources\\glsl\\object_vs.glsl",
-		"C:\\Users\\dhruv\\Development\\git\\mazer\\src\\resources\\glsl\\object_fs.glsl"
+		"://vertexShader",
+		"://fragShader"
 	);
 
 	playerObj = new ObjLoader();
-	playerObj->loadObject("C:\\Users\\dhruv\\Development\\git\\mazer\\src\\resources\\slr_camera.obj");
+	playerObj->loadObject("://slrCameraObj");
 	playerObj->setupModelMatrix();
 	playerObj->setupGLBuffers();
 

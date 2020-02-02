@@ -1,75 +1,58 @@
 #include "objLoader.hpp"
-
+#include <QFile>
 ObjLoader::ObjLoader() {
 	initializeOpenGLFunctions();
 };
 
-void ObjLoader::loadObject(const char * obj_path) {
-	std::ifstream objFile;
-	std::string line;
-	// ensure ifstream objects can throw exceptions:
-	objFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-	try
-	{
-		// open files
-		objFile.open(obj_path);
-	}
-	catch (std::ifstream::failure e)
-	{
-		std::cout << "ERROR::OBJLOADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
-	}
-	while (!objFile.eof()) {
-		std::getline(objFile, line);
-		std::istringstream ss(line);
-		std::string token;
+void ObjLoader::loadObject(QString obj_path) {
+	qDebug() << "ObjLoader:: Reading " << obj_path;
+		
+	QFile obj_file(obj_path);
+	obj_file.open(QIODevice::ReadOnly);
+	
+	QTextStream textStream(&obj_file);
+	
+	
+	if (obj_file.isOpen()) {
+		while (!textStream.atEnd()) {
+			QString line = textStream.readLine();
+			QStringList list = line.split(" ");
+			bool isTexture = list.count() == 4 ? false : true;
+			if (list[0] == "v" && !isTexture) {
+				QVector3D vertex;
 
-		std::getline(ss, token, ' ');
-		//std::cout << line << std::endl;
-
-		if (token == "v") {
-			QVector3D vertex;
-			for (int i = 0; i < 3; i++) {
-				std::getline(ss, token, ' ');
-				//std::cout << token << std::endl;
-				vertex[i] = std::stof(token);
+				for (int i = 1; i < list.count(); i++) {
+					vertex[i-1] = list[i].toFloat();
+				}
+				rawVertices.push_back(vertex);
 			}
-			rawVertices.push_back(vertex);
-		}
-		else if (token == "vt") {
-			QVector2D texture;
-			for (int i = 0; i < 2; i++) {
-				std::getline(ss, token, ' ');
-				texture[i] = std::stof(token);
+			else if (list[0] == "vt" && isTexture) {
+				QVector2D texture;
+				for (int i = 1; i < list.count(); i++) {
+					texture[i-1] = list[i].toFloat();
+				}
+				rawVertices.push_back(texture);
 			}
-			rawTextures.push_back(texture);
-		}
-		else if (token == "vn") {
-			QVector3D normal;
-			for (int i = 0; i < 3; i++)
-			{
-				std::getline(ss, token, ' ');
-				normal[i] = std::stof(token);
+			else if (list[0] == "vn" && !isTexture) {
+				QVector3D normal;
+				for (int i = 1; i < list.count(); i++) {
+					normal[i-1] = list[i].toFloat();
+				}
+				rawNormals.push_back(normal);
 			}
-			rawNormals.push_back(normal);
-		}
-		else if (token == "f") {
-			// f 1/1/1 2/2/2 3/3/3
-			for (int i = 0; i < 3; i++) {
-				std::getline(ss, token, ' ');
-				std::istringstream ss2(token);
-				std::string index;
-
-				std::getline(ss2, index, '/');
-				vertesIndices.push_back(std::stoul(index));
-
-				std::getline(ss2, index, '/');
-				textureIndices.push_back(std::stoul(index));
-
-				std::getline(ss2, index, '/');
-				normalIndices.push_back(std::stoul(index));
+			else if (list[0] == "f" && !isTexture) {
+				// f 1/1/1 2/2/2 3/3/3
+				for (int i = 1; i < list.count(); i++) {
+					QStringList indexGroup = list[i].split("/");
+					vertesIndices.push_back(indexGroup[0].toInt());
+					textureIndices.push_back(indexGroup[1].toInt());
+					normalIndices.push_back(indexGroup[2].toInt());
+				}
 			}
+
 		}
 	}
+
 	std::cout << vertesIndices.size() << std::endl;
 	for (int i = 0; i < vertesIndices.size(); i++) {
 		vertices.push_back(Vertex{

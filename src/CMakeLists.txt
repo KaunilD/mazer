@@ -12,6 +12,7 @@ endif()
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
 
 find_package(Qt5 COMPONENTS REQUIRED Core Gui Widgets )
 if(${Qt5_FOUND})
@@ -77,6 +78,7 @@ add_executable(mazer WIN32
 	${HEADERS}
 	${moc_sources}
 	${ui_wrap}
+	"resources.qrc"
 )
 
 target_include_directories(
