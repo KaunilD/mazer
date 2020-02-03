@@ -12,6 +12,10 @@ class ShaderProgram {
 		
 		ShaderProgram(QObject * parent);
 
+		GLuint modelMatrix;
+		GLuint viewMatrix;
+		GLuint projectionMatrix;
+
 		void loadShaders(const char * vs_path, const char * fs_path);
 };
 

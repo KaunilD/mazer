@@ -1,12 +1,13 @@
 #ifndef MAZEGLWIDGET_H
 #define MAZEGLWIDGET_H
-// ObjectLoader
-#include "objLoader.hpp"
 // shaderprogram
 #include "shaderprogram.hpp"
 // Qt
 #include <QWidget>
 #include <QOpenGLWidget>
+// algorithms
+#include "gameobject.hpp"
+#include "algorithms.hpp"
 
 
 class MazeGLWidget : public QOpenGLWidget, protected QAbstractOpenGLFunctions
@@ -16,13 +17,18 @@ public:
 	~MazeGLWidget();
 
 
-	ObjLoader * playerObj;
+	GameObject * playerObj;
 	ShaderProgram * playerObjShader;
 
-	void initializeGL();
-	void paintGL();
-	void resizeGL(int w, int h);
-
+	Algorithms * algorithm;
+	vector<GameObject *> * mazeBlocks;
+	QMatrix4x4 * projectionMatrix, *viewMatrix;
+	void initializeGL() override;
+	void paintGL() override;
+	void resizeGL(int w, int h) override;
+	float _width, _height;
+	float aspect_ratio{1.0};
+	void resize();
 private:
 
 	int m_frame;

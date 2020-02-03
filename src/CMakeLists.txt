@@ -53,8 +53,9 @@ set(SRCS
 	"main.cpp"
 	"mainwindow.cpp"
 	"mazeglwidget.cpp"
-	"objLoader.cpp"
 	"shaderprogram.cpp"
+	"algorithms.cpp"
+	"gameobject.cpp"
 )
 
 set(UI
@@ -64,9 +65,10 @@ set(UI
 set(HEADERS
 	"mainwindow.hpp"
 	"mazeglwidget.hpp"
-	"objLoader.hpp"
 	"vertex.hpp"
 	"shaderprogram.hpp"
+	"algorithms.hpp"
+	"gameobject.hpp"
 )
 
 qt5_wrap_ui(ui_wrap ${UI})

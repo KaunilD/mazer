@@ -4,5 +4,6 @@
         <file alias="vertexShader">resources/glsl/object_vs.glsl</file>
         <file alias="golfBallObj">resources/golf_ball.obj</file>
         <file alias="slrCameraObj">resources/slr_camera.obj</file>
+        <file alias="cubeObj">resources/slime.obj</file>
     </qresource>
 </RCC>

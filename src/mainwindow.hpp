@@ -17,6 +17,8 @@ public:
 
 private slots:
 	void on_actionExit_triggered();
+protected:
+	void resizeEvent(QResizeEvent * event);
 
 private:
 	Ui::MainWindow *ui;

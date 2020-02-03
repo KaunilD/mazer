@@ -10,4 +10,8 @@ void ShaderProgram::loadShaders(const char * vsPath, const char * fsPath) {
 	program->addShaderFromSourceFile(QOpenGLShader::Vertex, QString(vsPath));
 	program->addShaderFromSourceFile(QOpenGLShader::Fragment, QString(fsPath));
 	program->link();
+
+	modelMatrix = program->uniformLocation("modelMatrix");
+	projectionMatrix = program->uniformLocation("projectionMatrix");
+	viewMatrix = program->uniformLocation("viewMatrix");
 }
