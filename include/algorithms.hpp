@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <array>
 #include <random>
+#include <ctime>
+#include <cstdlib>
 
 using std::vector;
 using std::cout;
@@ -15,12 +17,12 @@ class Algorithms {
 
 public:
 
-	vector<int> grid;
+	vector<int> *grid;
 	int width, height;
 	int sx, sy, ex, ey;
 	std::array<char, 4> directions;
 
-	Algorithms(unsigned int h, unsigned int w);
+	Algorithms();
 
 	void resetGrid();
 	int xyToIndex(int x, int y);
@@ -29,6 +31,8 @@ public:
 	void backtrackRecursively(int sx, int sy);
 	bool helper(int sx, int sy);
 	void printGrid();
+
+	int randomInt(int max);
 };
 
 #endif

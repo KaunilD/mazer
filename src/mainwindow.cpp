@@ -12,8 +12,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::resizeEvent(QResizeEvent * event) {
 
-	ui->mazeGLWidget->resize();
-	
+	ui->mazeGLWidget->update();
+	QWidget::connect(ui->resetButton, SIGNAL(clicked()), this, SLOT(resetClicked()));
+}
+
+void MainWindow::resetClicked() {
+	int w = ui->widthEdit->text().toInt();
+	int h = ui->heightEdit_2->text().toInt();
+	ui->mazeGLWidget->reset(w, h);
 }
 
 MainWindow::~MainWindow()

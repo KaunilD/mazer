@@ -16,7 +16,10 @@
 
 class MazeGLWidget : public QOpenGLWidget, protected QAbstractOpenGLFunctions
 {
+	Q_OBJECT
+
 public:
+
 	MazeGLWidget(QWidget *parent = 0);
 	~MazeGLWidget();
 
@@ -25,17 +28,20 @@ public:
 
 	Algorithms * mazeGrid;
 	vector<GameObject *> * mazeBlocks;
-	vector<GameObject *> gameObjects;
+	vector<GameObject *> * gameObjects;
 	QMatrix4x4 * projectionMatrix, *viewMatrix;
 	Camera *camera;
 	
 	void initializeGL() override;
 	void paintGL() override;
 	void resizeGL(int w, int h) override;
-	float _width, _height;
+	float frameBufferWidth, frameBufferHeight;
 	float aspect_ratio{1.0};
 	void resize();
 	bool isWall();
+	void reset(unsigned int w, unsigned int h);
+
+	void initializeGLfromGrid();
 private:
 	int frame{0};
 	void loadShader(const char * vs, const char * fs);

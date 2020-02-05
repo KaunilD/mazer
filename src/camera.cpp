@@ -4,8 +4,8 @@ Camera::Camera(){}
 
 Camera::Camera(
 	QVector3D posVector, QVector3D frontVector, QVector3D upVector, 
-	float fov, float aspect_ratio, float near, float far
-): posVector(posVector), frontVector(frontVector), upVector(upVector), fov(fov), aspect_ratio(aspect_ratio), _near(near), _far(far) {
+	float fov, int fbW, int fbH, float near, float far
+): posVector(posVector), frontVector(frontVector), upVector(upVector), fov(fov), frameBufferWidth(fbW), frameBufferHeight(fbH), _near(near), _far(far) {
 	
 	viewMatrix = new QMatrix4x4();
 	viewMatrix->setToIdentity();
@@ -14,7 +14,7 @@ Camera::Camera(
 	projectionMatrix->setToIdentity();
 
 	updateViewMatrix();
-	updateProjectionMatrix();
+	updateProjectionMatrix(fbW, fbH);
 }
 
 void Camera::setSpeed(double _speed) {
@@ -47,11 +47,11 @@ void Camera::updateViewMatrix() {
 }
 
 
-void Camera::updateProjectionMatrix() {
+void Camera::updateProjectionMatrix(int frameBufferWidth, int frameBufferHeight) {
 	projectionMatrix->setToIdentity();
 	projectionMatrix->perspective(
 		fov,
-		aspect_ratio,
+		frameBufferWidth*1.0/frameBufferHeight,
 		_near, _far
 	);
 }

@@ -10,7 +10,7 @@ GameObject::GameObject(bool npc, const QString & filePath, QVector3D _color):
 }
 
 void GameObject::loadObject(const QString & filePath) {
-	qDebug() << "ObjLoader:: Reading " << filePath;
+	//qDebug() << "ObjLoader:: Reading " << filePath;
 
 	QFile obj_file(filePath);
 	obj_file.open(QIODevice::ReadOnly);

@@ -18,7 +18,7 @@ public:
 	float _near;
 	float _far;
 
-	double aspect_ratio{ 1.3 };
+	int frameBufferWidth, frameBufferHeight;
 
 	double speed;
 
@@ -29,7 +29,7 @@ public:
 	Camera();
 	Camera(
 		QVector3D posVector, QVector3D frontVector, QVector3D upVector, 
-		float fov, float aspect_ratio, float _near, float _far
+		float fov, int fbW, int fbH, float _near, float _far
 	);
 	~Camera();
 
@@ -37,7 +37,7 @@ public:
 	void processKB(Movement mov, float speed);
 
 	void updateViewMatrix();
-	void updateProjectionMatrix();
+	void updateProjectionMatrix(int frameBufferWidth, int frameBufferHeight);
 	QMatrix4x4 getProjectionMatrix();
 	QMatrix4x4 getViewMatrix();
 };

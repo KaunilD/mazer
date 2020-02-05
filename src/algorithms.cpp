@@ -4,13 +4,17 @@ using std::vector;
 using std::cout;
 using std::endl;
 
-Algorithms::Algorithms(unsigned int h, unsigned int w) :width(w), height(h), directions({ {'N', 'E', 'W', 'S'} }) {
-	grid = vector<int>(width*height, 1);
+Algorithms::Algorithms():directions({ {'N', 'E', 'W', 'S'} }) {
+}
+
+int Algorithms::randomInt(int max) {
+	srand(time(0));
+	return rand() % max;
 }
 
 void Algorithms::resetGrid() {
 	for (int i = 0; i < width*height; i++) {
-		grid[i] = 1;
+		grid->at(i) = 1;
 	}
 }
 
@@ -32,23 +36,27 @@ bool Algorithms::inBounds(int x, int y) {
 	return true;
 }
 
-bool Algorithms::helper(int _sx, int _sy) {
-	if (!inBounds(_sx, _sy)) {
-		return false;
-	}
-	sx = _sx;
-	sy = _sy;
-	
-	// account for 0-indexing
+bool Algorithms::helper(int w, int h) {
+	grid = new vector<int>(w*h, 1);
+
+	width = w;
+	height = h;
+
+	sx = randomInt(width);
+	sy = randomInt(height);
+	qDebug() << sx << " " << sy;
+
 	backtrackRecursively(sx, sy);
-	
+	qDebug() << "initialized maze";
 	return true;
 }
 
 void Algorithms::backtrackRecursively(int sx, int sy) {
-	cout << sx << " " << sy;
-	grid[xyToIndex(sx, sy)] = 0;
+	
+	qDebug() << sx << " " << sy;
 
+	grid->at(xyToIndex(sx, sy)) = 0;
+	
 	shuffle(directions.begin(), directions.end(), std::default_random_engine(rand()));
 
 	for (int i = 0; i < 4; i++) {
@@ -64,10 +72,10 @@ void Algorithms::backtrackRecursively(int sx, int sy) {
 		int yn = sy + (dy << 1);
 
 		if (inBounds(xn, yn)) {
-			if (grid[xyToIndex(xn, yn)] == 1) {
+			if (grid->at(xyToIndex(xn, yn)) == 1) {
 				ex = xn;
 				ey = yn;
-				grid[xyToIndex(xn - dx, yn - dy)] = 0;
+				grid->at(xyToIndex(xn - dx, yn - dy)) = 0;
 				this->backtrackRecursively(xn, yn);
 			}
 		}
