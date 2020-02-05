@@ -66,7 +66,7 @@ void GameObject::loadObject(const QString & filePath) {
 				rawVertices[vertesIndices[i] - 1],
 				rawNormals[normalIndices[i] - 1],
 				rawTextures[textureIndices[i] - 1],
-				color,
+				QVector3D(1.0f, 1.0f, 1.0f),
 				QVector3D(1.0f, 1.0f, 1.0f),
 				QVector3D(1.0f, 1.0f, 1.0f),
 			});
@@ -148,7 +148,7 @@ void GameObject::render() {
 	// NORMAL
 	GLuint normalAttribLoc = program->attributeLocation("vertex_normal");
 	program->enableAttributeArray(normalAttribLoc);
-	program->setAttributeBuffer(colorAttribLoc, GL_FLOAT, (int)offsetof(Vertex, normals), 3, sizeof(Vertex));
+	program->setAttributeBuffer(normalAttribLoc, GL_FLOAT, (int)offsetof(Vertex, normals), 3, sizeof(Vertex));
 
 
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);

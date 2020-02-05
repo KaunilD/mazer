@@ -16,9 +16,12 @@ class ShaderProgram {
 		GLuint modelMatrix;
 		GLuint viewMatrix;
 		GLuint projectionMatrix;
+		GLuint colorVec3;
 
 		void loadShaders(const char * vs_path, const char * fs_path);
 
+		void sendMatricesToShader(Camera camera, QMatrix4x4 modelMatrix);
+		void sendColorToShader(QVector3D color);
 		void sendMatricesToShader(Camera camera);
 };
 

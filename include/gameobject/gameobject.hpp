@@ -42,7 +42,7 @@ public:
 	void setupModelMatrix(QVector3D translate, QVector3D scale);
 
 	void setColor(QVector3D color);
-
+	QVector3D getColor() { return this->color; };
 	void scale(QVector3D scale);
 	void translate(QVector3D translate);
 	void setTranslation(QVector3D translate);

@@ -44,7 +44,11 @@ void MazeGLWidget::initializeGL() {
 	);
 
 
-	GameObject *playerObject = new PlayerObject(false, QString("://slrCameraObj"), QVector3D(0.0, 1.0, 1.0));
+	GameObject *playerObject = new PlayerObject(
+		false, 
+		QString("://slrCameraObj"), 
+		QVector3D(0.0, 1.0, 1.0)
+	);
 	playerObject->setTranslation(QVector3D(mazeGrid->sx, mazeGrid->sy, 0));
 	playerObject->setupModelMatrix(
 		QVector3D(
@@ -64,7 +68,11 @@ void MazeGLWidget::initializeGL() {
 	vector<int> xyLocation;
 	for (int i = 0; i < mazeGrid->width*mazeGrid->height; i++) {
 		xyLocation = mazeGrid->indexToxy(i);
-		GameObject *obj = new WallObject(true, QString("://cubeObj"), QVector3D(1.0, 0, 0.60));
+		GameObject *obj = new WallObject(
+			true, 
+			QString("://cubeObj"), 
+			QVector3D(1.0, 0, 0.00)
+		);
 		obj->setupModelMatrix(
 			QVector3D(
 				xyLocation[0] + 0.5 - mazeGrid->width / 2,
@@ -89,23 +97,27 @@ void MazeGLWidget::paintGL() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	gameObjects[0]->setShaders(playerObjShader);
-	playerObjShader->sendMatricesToShader(*camera);
-	playerObjShader->program->setUniformValue(
-		playerObjShader->modelMatrix,
+	playerObjShader->sendMatricesToShader(
+		*camera, 
 		gameObjects[0]->getModelMatrix()
+	);
+	playerObjShader->sendColorToShader(
+		gameObjects[0]->getColor()
 	);
 	gameObjects[0]->render();
 
 	
 	for (int i = 0; i < mazeGrid->width*mazeGrid->height; i++) {
-
 		if (mazeGrid->grid[i] == 1) {
 			gameObjects[i+1]->setShaders(playerObjShader);
-			playerObjShader->sendMatricesToShader(*camera);
-			playerObjShader->program->setUniformValue(
-				playerObjShader->modelMatrix,
-				gameObjects[i+1]->getModelMatrix()
+			playerObjShader->sendMatricesToShader(
+				*camera, 
+				gameObjects[i + 1]->getModelMatrix()
 			);
+			playerObjShader->sendColorToShader(
+				QVector3D(1.0, 0.0, 1.0)    
+			);
+			qDebug() << gameObjects[i + 1]->getColor();
 			gameObjects[i+1]->render();
 		}
 	}

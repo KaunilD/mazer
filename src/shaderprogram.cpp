@@ -14,10 +14,11 @@ void ShaderProgram::loadShaders(const char * vsPath, const char * fsPath) {
 	modelMatrix = program->uniformLocation("modelMatrix");
 	projectionMatrix = program->uniformLocation("projectionMatrix");
 	viewMatrix = program->uniformLocation("viewMatrix");
+	colorVec3 = program->uniformLocation("u_vs_color");
 }
 
 
-void ShaderProgram::sendMatricesToShader(Camera camera) {
+void ShaderProgram::sendMatricesToShader(Camera camera, QMatrix4x4 _modelMatrix) {
 	program->setUniformValue(
 		projectionMatrix,
 		camera.getProjectionMatrix()
@@ -26,6 +27,16 @@ void ShaderProgram::sendMatricesToShader(Camera camera) {
 		viewMatrix,
 		camera.getViewMatrix()
 	);
+	program->setUniformValue(
+		modelMatrix,
+		_modelMatrix
+	);
 
 }
 
+void ShaderProgram::sendColorToShader(QVector3D color) {
+	program->setUniformValue(
+		colorVec3,
+		color
+	);
+}

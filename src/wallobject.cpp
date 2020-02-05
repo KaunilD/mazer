@@ -11,3 +11,4 @@ WallObject::WallObject(bool npc, QString filePath, QVector3D color):
 void WallObject::updateObject(int frames, QKeyEvent * event, Algorithms * mazeGrid) {
 	return;
 }
+

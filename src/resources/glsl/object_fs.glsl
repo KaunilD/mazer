@@ -10,7 +10,7 @@ void main()
 {
 	float ambientStrength = 0.5;
 	vec3 lightColor = vec3(1.0, 1.0, 1.0);
-	vec3 lightPos = vec3(0.0, 0.0, 1.0);
+	vec3 lightPos = vec3(0.0, 0.0, 10.0);
 	
 	vec3 ambient = ambientStrength * lightColor;
   	
@@ -21,5 +21,5 @@ void main()
 	vec3 diffuse = diff * lightColor;
         
 	vec3 result = (ambient + diffuse ) * vs_color;
-	gl_FragColor = vec4(vs_color, 1.0);
+	gl_FragColor = vec4(result, 1.0);
 }

@@ -9,8 +9,6 @@ PlayerObject::PlayerObject(bool npc, QString filePath, QVector3D color) :
 
 }
 
-
-
 void PlayerObject::updateObject(
 	int frames, QKeyEvent * event, Algorithms * mazeGrid
 ) {
