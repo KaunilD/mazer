@@ -6,12 +6,14 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
+	
+
 }
 
 void MainWindow::resizeEvent(QResizeEvent * event) {
-	qDebug() << "mainwindow " << size();
-	ui->mazeGLWidget->resize();
 
+	ui->mazeGLWidget->resize();
+	
 }
 
 MainWindow::~MainWindow()

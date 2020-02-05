@@ -20,7 +20,7 @@ int Algorithms::xyToIndex(int x, int y) {
 
 vector<int> Algorithms::indexToxy(int index) {
 	vector<int> location(2, 0);
-	location[1] = (int)index / height;
+	location[1] = (int)index / width;
 	location[0] = index - (location[1] * width);
 	return location;
 }
@@ -54,10 +54,10 @@ void Algorithms::backtrackRecursively(int sx, int sy) {
 	for (int i = 0; i < 4; i++) {
 		int dx = 0, dy = 0;
 		switch (directions[i]) {
-		case 'N': dy = -1; break;
-		case 'E': dx = 1; break;
-		case 'W': dx = -1; break;
-		case 'S': dy = 1; break;
+			case 'N': dy = -1; break;
+			case 'E': dx = 1; break;
+			case 'W': dx = -1; break;
+			case 'S': dy = 1; break;
 		}
 
 		int xn = sx + (dx << 1);
@@ -65,6 +65,8 @@ void Algorithms::backtrackRecursively(int sx, int sy) {
 
 		if (inBounds(xn, yn)) {
 			if (grid[xyToIndex(xn, yn)] == 1) {
+				ex = xn;
+				ey = yn;
 				grid[xyToIndex(xn - dx, yn - dy)] = 0;
 				this->backtrackRecursively(xn, yn);
 			}

@@ -2,8 +2,8 @@
 
 GameObject::GameObject() {}
 
-GameObject::GameObject(bool npc, const QString & filePath, QVector3D color):
-	npc(npc), translation(QVector3D(1.0f, 1.0f, 1.0f)), color(QVector3D(0.0, 1.0, 1.0)) {
+GameObject::GameObject(bool npc, const QString & filePath, QVector3D _color):
+	npc(npc), translation(QVector3D(1.0f, 1.0f, 1.0f)), color(_color) {
 
 	initializeOpenGLFunctions();
 	loadObject(filePath);

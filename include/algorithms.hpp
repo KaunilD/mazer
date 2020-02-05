@@ -17,7 +17,7 @@ public:
 
 	vector<int> grid;
 	int width, height;
-	int sx, sy;
+	int sx, sy, ex, ey;
 	std::array<char, 4> directions;
 
 	Algorithms(unsigned int h, unsigned int w);
