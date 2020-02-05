@@ -96,6 +96,7 @@ void MazeGLWidget::reset(unsigned int w, unsigned int h) {
 	mazeGrid->helper(w, h);
 	initializeGLfromGrid();
 	update();
+	this->setFocus();
 }
 
 
