@@ -4,44 +4,38 @@ MazeGLWidget::MazeGLWidget(QWidget *parent) : QOpenGLWidget(parent)
 {
 	QSurfaceFormat format;
 	format.setSamples(16);
+	format.setProfile(QSurfaceFormat::CompatibilityProfile);
 	this->setFormat(format);
 
 	this->setGeometry(0, 0, width(), height());
+	this->setFocus();
 
-	projectionMatrix = new QMatrix4x4();
-	projectionMatrix->setToIdentity();
-	projectionMatrix->perspective(90.0, _width/_height, .10f, 100.);
+	mazeGrid = new Algorithms(10, 10);
+	mazeGrid->helper(5, 6);
+	mazeGrid->printGrid();
 
-	viewMatrix = new QMatrix4x4();
-	viewMatrix->setToIdentity();
-	viewMatrix->lookAt(
-		QVector3D(0.0f, 0.0f, 1.0f), 
-		QVector3D(0.0f, 0.0f, 0.0f), 
-		QVector3D(0.0f, 1.0f, 0.0f)
-	);
-
-
-	algorithm = new Algorithms(20, 20);
-	algorithm->backtrackRecursively(2, 2);
 }
 
 
 MazeGLWidget::~MazeGLWidget() {}
 
 void MazeGLWidget::initializeGL() {
+
 	initializeOpenGLFunctions();
 
 	glDepthMask(GL_TRUE);
-	/* clear the depth */
-	//glClearDepth(1.0f);
-	/* enable the depth test */
 	glEnable(GL_DEPTH_TEST);
-	/* enable cullmode CCW (counter clockwise) */
 	glEnable(GL_CULL_FACE);
-	/* sets the color the screen needs to be cleared with */
 	glClearColor(0.f, 0.f, 0.f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	camera = new Camera(
+		QVector3D(0.0f, 0.0f, 1.0f),
+		QVector3D(0.0f, 0.0f, -1.0f),
+		QVector3D(0.0f, 1.0f, 0.0f),
+		90.0f, width() / (float)height(), 0.1f, 100.f
+	);
+	camera->setSpeed(0.08);
 
 	playerObjShader = new ShaderProgram(this);
 	playerObjShader->loadShaders(
@@ -50,87 +44,77 @@ void MazeGLWidget::initializeGL() {
 	);
 
 
-	playerObj = new GameObject(false, QString("://slrCameraObj"));
-	playerObj->setupModelMatrix(
-		QVector3D(0.0, 0.0, 0.0), 
-		QVector3D(1.0, 1.0, 1.0)
+	GameObject *playerObject = new PlayerObject(false, QString("://slrCameraObj"), QVector3D(0.0, 1.0, 1.0));
+	playerObject->setTranslation(QVector3D(mazeGrid->sx, mazeGrid->sy, 0));
+	playerObject->setupModelMatrix(
+		QVector3D(
+			mazeGrid->sx + 0.5 - mazeGrid->width / 2,
+			mazeGrid->sy + 0.5 - mazeGrid->height / 2, 0.0f
+		),
+		QVector3D(
+			(2.0 / (mazeGrid->width)),
+			(2.0 / (mazeGrid->height)), 0.1f
+		)
 	);
-	playerObj->setupGLBuffers();
+
+	playerObject->setupGLBuffers();
+	gameObjects.push_back(playerObject);
+
 
 	vector<int> xyLocation;
-	mazeBlocks = new vector<GameObject *>(algorithm->grid.size());
-	for (int i = 0; i < mazeBlocks->size(); i++) {
-		if (algorithm->grid[i] == 1) {
-
-			xyLocation = algorithm->indexToxy(i);
-			qDebug() << (xyLocation[0] / (float)(algorithm->width));
-			GameObject *obj = new GameObject(true, QString("://cubeObj"));
-			obj->setupModelMatrix(
-				QVector3D(
-					xyLocation[0]+0.5 - algorithm->width/2,
-					xyLocation[1]+0.5 - algorithm->height/2, 0
-				), 
-				QVector3D(
-					(2.0/(algorithm->width)), 
-					(2.0/(algorithm->height)), .10f
-				)
-			);
-
-			obj->setupGLBuffers();
-			mazeBlocks->at(i) = obj;
-		}
+	for (int i = 0; i < mazeGrid->width*mazeGrid->height; i++) {
+		xyLocation = mazeGrid->indexToxy(i);
+		GameObject *obj = new WallObject(true, QString("://cubeObj"), QVector3D(1.0, 0, 0.60));
+		obj->setupModelMatrix(
+			QVector3D(
+				xyLocation[0] + 0.5 - mazeGrid->width / 2,
+				xyLocation[1] + 0.5 - mazeGrid->height / 2, 0
+			),
+			QVector3D(
+				(2.0 / (mazeGrid->width)),
+				(2.0 / (mazeGrid->height)), 
+				.10f
+			)
+		);
+		obj->setupGLBuffers();
+		gameObjects.push_back(obj);
 	}
 }
 
 void MazeGLWidget::paintGL() {
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	frame += 1;
 	glViewport(0, 0, width(), height());
-	
-	playerObj->attachShaders(playerObjShader);
 
-	playerObjShader->program->setUniformValue(
-		playerObjShader->projectionMatrix,
-		*projectionMatrix
-	);
-	playerObjShader->program->setUniformValue(
-		playerObjShader->viewMatrix,
-		*viewMatrix
-	);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	gameObjects[0]->setShaders(playerObjShader);
+	playerObjShader->sendMatricesToShader(*camera);
 	playerObjShader->program->setUniformValue(
 		playerObjShader->modelMatrix,
-		playerObj->getModelMatrix()
+		gameObjects[0]->getModelMatrix()
 	);
+	gameObjects[0]->render();
 
-	//playerObj->render();
 	
-	for (int i = 0; i < mazeBlocks->size(); i++) {
-		if (algorithm->grid[i] == 1) {
-			mazeBlocks->at(i)->attachShaders(playerObjShader);
+	for (int i = 0; i < mazeGrid->width*mazeGrid->height; i++) {
 
-			playerObjShader->program->setUniformValue(
-				playerObjShader->projectionMatrix,
-				*projectionMatrix
-			);
-			playerObjShader->program->setUniformValue(
-				playerObjShader->viewMatrix,
-				*viewMatrix
-			);
-
+		if (mazeGrid->grid[i] == 1) {
+			gameObjects[i+1]->setShaders(playerObjShader);
+			playerObjShader->sendMatricesToShader(*camera);
 			playerObjShader->program->setUniformValue(
 				playerObjShader->modelMatrix,
-				mazeBlocks->at(i)->getModelMatrix()
+				gameObjects[i+1]->getModelMatrix()
 			);
-			mazeBlocks->at(i)->render();
-
+			gameObjects[i+1]->render();
 		}
 	}
-	
+
 }
 
 void MazeGLWidget::resize() {
 	qDebug() << "resize";
-	QSizeF designSize = QSizeF(algorithm->width, algorithm->height);
+	QSizeF designSize = QSizeF(mazeGrid->width, mazeGrid->height);
 	QSizeF scaledSize = QSizeF(size());
 
 	scaledSize.scale(designSize, Qt::KeepAspectRatioByExpanding);
@@ -138,13 +122,24 @@ void MazeGLWidget::resize() {
 	_width = scaledSize.width();
 	_height = scaledSize.height();
 
-	update();
-
 }
 
-void MazeGLWidget::resizeGL(int w, int h) {
-	qDebug() << "glwidget resize";
-	aspect_ratio = h ? w / (float)h : 1;
-	int side = qMin(w, h);
-	glViewport(0, 0, w, h);
+void MazeGLWidget::resizeGL(int width, int height)
+{
+	aspect_ratio = width / (float)height;
+	int side = qMin(width, height);
+	glViewport(0, 0, width, height);
+}
+
+
+
+void MazeGLWidget::keyPressEvent(QKeyEvent * event) {
+
+	for (int i = 0; i < gameObjects.size(); i++) {
+		gameObjects.at(i)->updateObject(frame, event, mazeGrid);
+	}
+	camera->updateViewMatrix();
+
+	update();
+
 }

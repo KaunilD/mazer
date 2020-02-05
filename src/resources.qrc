@@ -2,8 +2,8 @@
     <qresource prefix="/">
         <file alias="fragShader">resources/glsl/object_fs.glsl</file>
         <file alias="vertexShader">resources/glsl/object_vs.glsl</file>
-        <file alias="golfBallObj">resources/golf_ball.obj</file>
-        <file alias="slrCameraObj">resources/slr_camera.obj</file>
-        <file alias="cubeObj">resources/slime.obj</file>
+        <file alias="slrCameraObj">resources/objects/slr_camera.obj</file>
+        <file alias="cubeObj">resources/objects/slime.obj</file>
+        <file alias="cubeTexture">resources/objects/slime.png</file>
     </qresource>
 </RCC>

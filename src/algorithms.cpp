@@ -1,4 +1,5 @@
 #include "algorithms.hpp"
+#include <QDebug>
 using std::vector;
 using std::cout;
 using std::endl;
@@ -13,8 +14,8 @@ void Algorithms::resetGrid() {
 	}
 }
 
-int Algorithms::xyToIndex(unsigned int x, unsigned int y) {
-	return width * x + y;
+int Algorithms::xyToIndex(int x, int y) {
+	return width * y + x;
 }
 
 vector<int> Algorithms::indexToxy(int index) {
@@ -31,7 +32,21 @@ bool Algorithms::inBounds(int x, int y) {
 	return true;
 }
 
+bool Algorithms::helper(int _sx, int _sy) {
+	if (!inBounds(_sx, _sy)) {
+		return false;
+	}
+	sx = _sx;
+	sy = _sy;
+	
+	// account for 0-indexing
+	backtrackRecursively(sx, sy);
+	
+	return true;
+}
+
 void Algorithms::backtrackRecursively(int sx, int sy) {
+	cout << sx << " " << sy;
 	grid[xyToIndex(sx, sy)] = 0;
 
 	shuffle(directions.begin(), directions.end(), std::default_random_engine(rand()));
@@ -60,8 +75,8 @@ void Algorithms::backtrackRecursively(int sx, int sy) {
 void Algorithms::printGrid() {
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
-			cout << grid[xyToIndex(j, i)];
+			qDebug() << grid[xyToIndex(j, i)];
 		}
-		cout << endl;
+		qDebug() << "";
 	}
 }

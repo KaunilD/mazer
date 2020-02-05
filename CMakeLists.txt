@@ -13,4 +13,3 @@ endif()
 
 # build the following
 add_subdirectory ("src")
-add_subdirectory("third-party/glfw-3.3/glfw-3.3")

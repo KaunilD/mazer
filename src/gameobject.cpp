@@ -1,8 +1,10 @@
-#include "gameObject.hpp"
+#include "gameObject/gameObject.hpp"
 
 GameObject::GameObject() {}
 
-GameObject::GameObject(bool npc, const QString & filePath): npc(npc) {
+GameObject::GameObject(bool npc, const QString & filePath, QVector3D color):
+	npc(npc), translation(QVector3D(1.0f, 1.0f, 1.0f)), color(QVector3D(0.0, 1.0, 1.0)) {
+
 	initializeOpenGLFunctions();
 	loadObject(filePath);
 }
@@ -64,7 +66,7 @@ void GameObject::loadObject(const QString & filePath) {
 				rawVertices[vertesIndices[i] - 1],
 				rawNormals[normalIndices[i] - 1],
 				rawTextures[textureIndices[i] - 1],
-				QVector3D(1.0f, 1.0f, 1.0f),
+				color,
 				QVector3D(1.0f, 1.0f, 1.0f),
 				QVector3D(1.0f, 1.0f, 1.0f),
 			});
@@ -74,11 +76,19 @@ void GameObject::loadObject(const QString & filePath) {
 }
 
 
-void GameObject::attachShaders(ShaderProgram * _program) {
+void GameObject::setShaders(ShaderProgram * _program) {
 	program = _program->program;
 	program->bind();
 
 };
+
+void GameObject::setColor(QVector3D _color) {
+	color = _color;
+}
+
+void GameObject::setTranslation(QVector3D translate) {
+	translation = translate;
+}
 
 void GameObject::translate(QVector3D translate) {
 	modelMatrix->translate(translate);
@@ -114,6 +124,10 @@ void GameObject::setupGLBuffers() {
 
 }
 
+void GameObject::updateObject(int frame, QKeyEvent * event, Algorithms * mazeGrid) {
+
+}
+
 void GameObject::render() {
 
 	if (program == NULL) {
@@ -122,7 +136,7 @@ void GameObject::render() {
 
 	indexBuffer.bind();
 	attributeBuffer.bind();
-
+	
 	// POSITION
 	GLuint positionAttribLoc = program->attributeLocation("vertex_position");
 	program->enableAttributeArray(positionAttribLoc);
@@ -152,6 +166,8 @@ QMatrix4x4 & GameObject::getModelMatrix() {
 }
 
 GameObject::~GameObject() {
+
 	indexBuffer.destroy();
 	attributeBuffer.destroy();
 }
+
