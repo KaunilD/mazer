@@ -65,14 +65,23 @@ set(HEADERS
 qt5_wrap_ui(ui_wrap ${UI})
 qt5_wrap_cpp(moc_sources ${HEADERS})
 
-
-add_executable(mazer WIN32
-	${SRCS}
-	${HEADERS}
-	${moc_sources}
-	${ui_wrap}
-	"resources.qrc"
-)
+if(WIN32)
+	add_executable(mazer WIN32
+		${SRCS}
+		${HEADERS}
+		${moc_sources}
+		${ui_wrap}
+		"resources.qrc"
+	)
+else()
+	add_executable(mazer
+		${SRCS}
+		${HEADERS}
+		${moc_sources}
+		${ui_wrap}
+		"resources.qrc"
+	)
+endif()
 
 target_include_directories(
 	mazer 
