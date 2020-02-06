@@ -14,6 +14,7 @@ void MainWindow::resizeEvent(QResizeEvent * event) {
 
 	ui->mazeGLWidget->update();
 	QWidget::connect(ui->resetButton, SIGNAL(clicked()), this, SLOT(resetClicked()));
+	
 }
 
 void MainWindow::resetClicked() {
@@ -27,7 +28,17 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
+
 void MainWindow::on_actionExit_triggered()
 {
 	this->close();
+}
+
+void MainWindow::congratsMessage() {
+	
+	congrats = new QMessageBox(this);
+	congrats->setText("Congrats! You've reached the destination.");
+	congrats->setWindowTitle("Game Over");
+	congrats->show();
+	
 }

@@ -59,6 +59,10 @@ void MazeGLWidget::paintGL() {
 	int side = qMin(width(), height());
 	glViewport((width() - side) / 2, (height() - side) / 2, side, side);
 
+	if (mazeGrid->solved) {
+		signalGameOver();
+		reset(mazeGrid->width, mazeGrid->height);
+	}
 
 	for (int i = 0; i < gameObjects->size(); i++) {
 		gameObjects->at(i)->setShaders(playerObjShader);
@@ -107,7 +111,7 @@ void MazeGLWidget::initializeGLfromGrid() {
 	GameObject *playerObject = new PlayerObject(
 		false,
 		QString("://cubeObj"),
-		QVector3D(1.0, 0.50, 1.0)
+		QVector3D(0.22, 0.557, 0.23)
 	);
 	playerObject->setTranslation(QVector3D(mazeGrid->sx, mazeGrid->sy, 0));
 	playerObject->setupModelMatrix(
@@ -135,7 +139,7 @@ void MazeGLWidget::initializeGLfromGrid() {
 			GameObject *obj = new WallObject(
 				true,
 				QString("://cubeObj"),
-				QVector3D(0.1, 1.0, 1.00)
+				QVector3D(0.961, 0.486, 0)
 			);
 			obj->setupModelMatrix(
 				QVector3D(
@@ -160,7 +164,7 @@ void MazeGLWidget::initializeGLfromGrid() {
 	GameObject *destinationObject = new WallObject(
 		false,
 		QString("://cubeObj"),
-		QVector3D(1.0, .50, 1.0)
+		QVector3D(0.098, 0.463, 0.824)
 	);
 	destinationObject->setTranslation(QVector3D(mazeGrid->ex, mazeGrid->ey, 0));
 	destinationObject->setupModelMatrix(
@@ -176,6 +180,11 @@ void MazeGLWidget::initializeGLfromGrid() {
 	destinationObject->setupGLBuffers();
 	gameObjects->push_back(destinationObject);
 
+
+}
+
+void MazeGLWidget::signalGameOver() {
+	emit gameOver();
 
 }
 

@@ -15,8 +15,7 @@ void PlayerObject::updateObject(
 	int x = translation[0];
 	int y = translation[1];
 	
-	qDebug() << translation;
-	
+
 	if (event->key() == Qt::Key_W) {
 	
 		if (mazeGrid->inBounds(x, y + 1) && mazeGrid->grid->at(mazeGrid->xyToIndex(x, y + 1)) == 0) {
@@ -43,4 +42,13 @@ void PlayerObject::updateObject(
 			translation += QVector3D(1.0f, 0.0f, 0.0f);
 		}
 	}
+
+	x = translation[0];
+	y = translation[1];
+
+	if (x == mazeGrid->ex && y == mazeGrid->ey) {
+		mazeGrid->solved = true;
+		return;
+	}
+
 }

@@ -40,12 +40,13 @@ public:
 	void resize();
 	bool isWall();
 	void reset(unsigned int w, unsigned int h);
-
+	void signalGameOver();
 	void initializeGLfromGrid();
 private:
 	int frame{0};
 	void loadShader(const char * vs, const char * fs);
-
+signals:
+	void gameOver();
 protected:
 	void keyPressEvent(QKeyEvent *);
 

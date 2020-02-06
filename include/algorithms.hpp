@@ -23,6 +23,7 @@ public:
 	std::array<char, 4> directions;
 
 	Algorithms();
+	~Algorithms();
 
 	void resetGrid();
 	int xyToIndex(int x, int y);
@@ -31,6 +32,7 @@ public:
 	void backtrackRecursively(int sx, int sy);
 	bool helper(int sx, int sy);
 	void printGrid();
+	bool solved{ false };
 
 	int randomInt(int max);
 };

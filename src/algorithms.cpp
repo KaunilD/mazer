@@ -7,6 +7,9 @@ using std::endl;
 Algorithms::Algorithms():directions({ {'N', 'E', 'W', 'S'} }) {
 }
 
+Algorithms::~Algorithms() {
+	delete grid;
+}
 int Algorithms::randomInt(int max) {
 	srand(time(0));
 	return rand() % max;
@@ -44,10 +47,11 @@ bool Algorithms::helper(int w, int h) {
 
 	sx = randomInt(width);
 	sy = randomInt(height);
-	qDebug() << sx << " " << sy;
 
+	solved = false;
+	
 	backtrackRecursively(sx, sy);
-	qDebug() << "initialized maze";
+
 	return true;
 }
 
