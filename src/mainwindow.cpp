@@ -18,9 +18,12 @@ void MainWindow::resizeEvent(QResizeEvent * event) {
 }
 
 void MainWindow::resetClicked() {
+	ui->resetButton->setEnabled(false);
 	int w = ui->widthEdit->text().toUInt();
 	int h = ui->heightEdit_2->text().toUInt();
 	ui->mazeGLWidget->reset(w, h);
+
+	ui->resetButton->setEnabled(true);
 }
 
 MainWindow::~MainWindow()
