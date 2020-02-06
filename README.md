@@ -10,7 +10,7 @@
 
 ### Installation instructions
 
-#### Windows
+#### Windows - tested
 
 1. Open the project in Visual Studio as a __CMake project__.
 2. Click CMake > Build  in the toolbar or press (ctrl + B).
