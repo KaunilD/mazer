@@ -1,4 +1,4 @@
-#include "gameObject/gameObject.hpp"
+#include "gameobject/gameobject.hpp"
 
 GameObject::GameObject() {}
 
@@ -9,8 +9,8 @@ GameObject::GameObject(bool npc, const QString & filePath, QVector3D _color):
 	loadObject(filePath);
 }
 
-void GameObject::loadObject(const QString & filePath) {
-	//qDebug() << "ObjLoader:: Reading " << filePath;
+void GameObject::loadObject(const QString & filePath, const QString & textureImage) {
+	qDebug() << "ObjLoader:: Reading object" << filePath;
 
 	QFile obj_file(filePath);
 	obj_file.open(QIODevice::ReadOnly);
@@ -73,14 +73,17 @@ void GameObject::loadObject(const QString & filePath) {
 		indices.push_back(i);
 	}
 
+	qDebug() << "ObjLoader:: Reading texture" << filePath;
+
+	QImage image(textureImage);
+	QImage t = convertToGLFormat(image);
+
+
+
+	
+
 }
 
-
-void GameObject::setShaders(ShaderProgram * _program) {
-	program = _program->program;
-	program->bind();
-
-};
 
 void GameObject::setColor(QVector3D _color) {
 	color = _color;
@@ -128,37 +131,40 @@ void GameObject::updateObject(int frame, QKeyEvent * event, Algorithms * mazeGri
 
 }
 
-void GameObject::render() {
-
-	if (program == NULL) {
-		return;
-	}
+void GameObject::render(ShaderProgram * shaderProgram) {
 
 	indexBuffer.bind();
 	attributeBuffer.bind();
 	
 	// POSITION
-	GLuint positionAttribLoc = program->attributeLocation("vertex_position");
-	program->enableAttributeArray(positionAttribLoc);
-	program->setAttributeBuffer(positionAttribLoc, GL_FLOAT, (int)offsetof(Vertex, position), 3, sizeof(Vertex));
+	GLuint positionAttribLoc = shaderProgram->program->attributeLocation("vertex_position");
+	shaderProgram->program->enableAttributeArray(positionAttribLoc);
+	shaderProgram->program->setAttributeBuffer(positionAttribLoc, GL_FLOAT, (int)offsetof(Vertex, position), 3, sizeof(Vertex));
+
 	// COLOR
-	GLuint colorAttribLoc = program->attributeLocation("vertex_color");
-	program->enableAttributeArray(colorAttribLoc);
-	program->setAttributeBuffer(colorAttribLoc, GL_FLOAT, (int)offsetof(Vertex, color), 3, sizeof(Vertex));
+	GLuint colorAttribLoc = shaderProgram->program->attributeLocation("vertex_color");
+	shaderProgram->program->enableAttributeArray(colorAttribLoc);
+	shaderProgram->program->setAttributeBuffer(colorAttribLoc, GL_FLOAT, (int)offsetof(Vertex, color), 3, sizeof(Vertex));
+
 	// NORMAL
-	GLuint normalAttribLoc = program->attributeLocation("vertex_normal");
-	program->enableAttributeArray(normalAttribLoc);
-	program->setAttributeBuffer(normalAttribLoc, GL_FLOAT, (int)offsetof(Vertex, normals), 3, sizeof(Vertex));
+	GLuint normalAttribLoc = shaderProgram->program->attributeLocation("vertex_normal");
+	shaderProgram->program->enableAttributeArray(normalAttribLoc);
+	shaderProgram->program->setAttributeBuffer(normalAttribLoc, GL_FLOAT, (int)offsetof(Vertex, normals), 3, sizeof(Vertex));
+
+	// TEXTURE
+	GLuint textureAttribLoc = shaderProgram->program->attributeLocation("vertex_texture");
+	shaderProgram->program->enableAttributeArray(textureAttribLoc);
+	shaderProgram->program->setAttributeBuffer(textureAttribLoc, GL_FLOAT, (int)offsetof(Vertex, texture), 2, sizeof(Vertex));
+
 
 
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 
-
 	glDisableVertexAttribArray(positionAttribLoc);
 	glDisableVertexAttribArray(colorAttribLoc);
 	glDisableVertexAttribArray(normalAttribLoc);
+	glDisableVertexAttribArray(textureAttribLoc);
 
-	program->release();
 }
 
 QMatrix4x4 & GameObject::getModelMatrix() {

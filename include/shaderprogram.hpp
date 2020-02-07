@@ -6,12 +6,12 @@
 #include <QOpenGLShaderProgram>
 #include <QObject>
 
-class ShaderProgram {
+class ShaderProgram{
 	public:
 		
-		QOpenGLShaderProgram * program;
-		
 		ShaderProgram(QObject * parent);
+
+		QOpenGLShaderProgram * program;
 
 		GLuint modelMatrix;
 		GLuint viewMatrix;
@@ -19,8 +19,11 @@ class ShaderProgram {
 		GLuint colorVec3;
 
 		void loadShaders(const char * vs_path, const char * fs_path);
+		bool activate();
+		void deactivate();
 
-		void sendMatricesToShader(Camera camera, QMatrix4x4 modelMatrix);
+		
+		void sendMatricesToShader(QMatrix4x4 projectionMatrix, QMatrix4x4 viewMatrix, QMatrix4x4 modelMatrix);
 		void sendColorToShader(QVector3D color);
 		void sendMatricesToShader(Camera camera);
 };

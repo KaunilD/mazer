@@ -1,7 +1,7 @@
 #include "shaderprogram.hpp"
 
 ShaderProgram::ShaderProgram(QObject *parent){
-	std::cout << "Shader Created" << std::endl;
+	qDebug() << "Shader Created";
 	program = new QOpenGLShaderProgram(parent);
 
 };
@@ -9,34 +9,40 @@ ShaderProgram::ShaderProgram(QObject *parent){
 void ShaderProgram::loadShaders(const char * vsPath, const char * fsPath) {
 	program->addShaderFromSourceFile(QOpenGLShader::Vertex, QString(vsPath));
 	program->addShaderFromSourceFile(QOpenGLShader::Fragment, QString(fsPath));
+	
 	program->link();
 
 	modelMatrix = program->uniformLocation("modelMatrix");
 	projectionMatrix = program->uniformLocation("projectionMatrix");
 	viewMatrix = program->uniformLocation("viewMatrix");
-	colorVec3 = program->uniformLocation("u_vs_color");
+
+	program->release();
 }
 
-
-void ShaderProgram::sendMatricesToShader(Camera camera, QMatrix4x4 _modelMatrix) {
-	program->setUniformValue(
-		projectionMatrix,
-		camera.getProjectionMatrix()
-	);
-	program->setUniformValue(
-		viewMatrix,
-		camera.getViewMatrix()
-	);
-	program->setUniformValue(
-		modelMatrix,
-		_modelMatrix
-	);
-
+void ShaderProgram::deactivate() {
+	if (this->program->isLinked()) {
+		this->program->release();
+	}
 }
 
-void ShaderProgram::sendColorToShader(QVector3D color) {
+bool ShaderProgram::activate() {
+	if (this->program->isLinked()) {
+		return this->program->bind();
+	}
+	return false;
+}
+
+void ShaderProgram::sendMatricesToShader(QMatrix4x4 projectionMatrix, QMatrix4x4 viewMatrix, QMatrix4x4 modelMatrix) {
 	program->setUniformValue(
-		colorVec3,
-		color
+		this->projectionMatrix,
+		projectionMatrix
+	);
+	program->setUniformValue(
+		this->viewMatrix,
+		viewMatrix
+	);
+	program->setUniformValue(
+		this->modelMatrix,
+		modelMatrix
 	);
 }

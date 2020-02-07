@@ -5,7 +5,7 @@
 class PlayerObject : public GameObject{
 
 public:
-	PlayerObject(bool npc, QString objPath, QVector3D color);
+	PlayerObject(bool npc, const QString & objPath, const QString & textureFile,  QVector3D color);
 	virtual void updateObject(int frames, QKeyEvent * event, Algorithms * mazeGrid);
 };
 
