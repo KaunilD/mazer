@@ -3,7 +3,9 @@
         <file alias="fragShader">resources/glsl/object_fs.glsl</file>
         <file alias="vertexShader">resources/glsl/object_vs.glsl</file>
         <file alias="slrCameraObj">resources/objects/slr_camera.obj</file>
-        <file alias="cubeObj">resources/objects/slime.obj</file>
-        <file alias="cubeTexture">resources/objects/slime.png</file>
+        <file alias="blattTexture">resources/objects/blatt.png</file>
+        <file alias="cubeObj">resources/objects/cube.obj</file>
+        <file alias="erdeMitGrassTexture">resources/objects/erde_mit_grass.png</file>
+        <file alias="ziegelsteinTexture">resources/objects/ziegelstein.png</file>
     </qresource>
 </RCC>

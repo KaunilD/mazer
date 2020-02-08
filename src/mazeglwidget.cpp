@@ -43,8 +43,8 @@ void MazeGLWidget::initializeGL() {
 
 	playerObjShader = new ShaderProgram(this);
 	playerObjShader->loadShaders(
-		"://vertexShader",
-		"://fragShader"
+		":/vertexShader",
+		":/fragShader"
 	);
 
 	/*
@@ -60,7 +60,7 @@ void MazeGLWidget::initializeGLfromGrid() {
 
 
 	GameObject *playerObject = new PlayerObject(false);
-	playerObject->loadObject(QString("://cubeObj"),QString("://cubeTexture"));
+	playerObject->loadObject(QString(":/cubeObj"), QString(":/erdeMitGrassTexture"));
 	playerObject->setTranslation(QVector3D(mazeGrid->sx, mazeGrid->sy, 0));
 	playerObject->setupModelMatrix(
 		QVector3D(
@@ -85,7 +85,7 @@ void MazeGLWidget::initializeGLfromGrid() {
 		xyLocation = mazeGrid->indexToxy(i);
 		if (mazeGrid->grid->at(i) == 1) {
 			GameObject *obj = new WallObject(true);
-			obj->loadObject(QString("://cubeObj"), QString("://cubeTexture"));
+			obj->loadObject(QString(":/cubeObj"), QString(":/blattTexture"));
 			obj->setupModelMatrix(
 				QVector3D(
 					xyLocation[0] - mazeGrid->width / 2,
@@ -107,7 +107,7 @@ void MazeGLWidget::initializeGLfromGrid() {
 		INSTANSTIATE destination
 	*/
 	GameObject *destinationObject = new WallObject(false);
-	destinationObject->loadObject(QString("://cubeObj"),QString("://cubeTexture"));
+	destinationObject->loadObject(QString(":/cubeObj"), QString(":/ziegelsteinTexture"));
 
 	destinationObject->setTranslation(QVector3D(mazeGrid->ex, mazeGrid->ey, 0));
 	destinationObject->setupModelMatrix(
