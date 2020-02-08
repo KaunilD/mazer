@@ -167,5 +167,6 @@ GameObject::~GameObject() {
 
 	indexBuffer.destroy();
 	attributeBuffer.destroy();
+
 }
 

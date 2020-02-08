@@ -6,6 +6,7 @@
 
 #include <QKeyEvent>
 #include <QWidget>
+#include <QTimer>
 #include <QOpenGLWidget>
 // algorithms
 #include "gameobject/gameobject.hpp"
@@ -35,8 +36,6 @@ public:
 	void initializeGL() override;
 	void paintGL() override;
 	void resizeGL(int w, int h) override;
-	float frameBufferWidth, frameBufferHeight;
-	float aspect_ratio{1.0};
 	void resize();
 	bool isWall();
 	void reset(unsigned int w, unsigned int h);
@@ -44,12 +43,13 @@ public:
 	void initializeGLfromGrid();
 private:
 	int frame{0};
+	QTimer updateTimer;
 	void loadShader(const char * vs, const char * fs);
 signals:
 	void gameOver();
 protected:
 	void keyPressEvent(QKeyEvent *);
-
+	void wheelEvent(QWheelEvent *);
 };
 
 #endif

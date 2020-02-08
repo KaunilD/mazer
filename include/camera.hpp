@@ -4,6 +4,7 @@
 
 #include <QMatrix4x4>
 #include <QVector3D>
+#include <QWheelEvent>
 
 enum Movement {
 	W,
@@ -38,8 +39,12 @@ public:
 
 	void updateViewMatrix();
 	void updateProjectionMatrix(int frameBufferWidth, int frameBufferHeight);
+	void resetProjectionMatrix();
+
 	QMatrix4x4 getProjectionMatrix();
 	QMatrix4x4 getViewMatrix();
+
+	void update(QWheelEvent *);
 };
 
 #endif

@@ -47,11 +47,20 @@ void Camera::updateViewMatrix() {
 }
 
 
-void Camera::updateProjectionMatrix(int frameBufferWidth, int frameBufferHeight) {
+void Camera::updateProjectionMatrix(int _frameBufferWidth, int _frameBufferHeight) {
 	projectionMatrix->setToIdentity();
 	projectionMatrix->perspective(
 		fov,
-		frameBufferWidth*1.0/frameBufferHeight,
+		_frameBufferWidth*1.0/_frameBufferHeight,
+		_near, _far
+	);
+}
+
+void Camera::resetProjectionMatrix() {
+	projectionMatrix->setToIdentity();
+	projectionMatrix->perspective(
+		fov,
+		frameBufferWidth*1.0 / frameBufferHeight,
 		_near, _far
 	);
 }
@@ -62,6 +71,16 @@ QMatrix4x4 Camera::getProjectionMatrix() {
 
 QMatrix4x4 Camera::getViewMatrix() {
 	return *viewMatrix;
+}
+
+void Camera::update(QWheelEvent * event) {
+	if (event->delta() < 0)
+		fov += speed;
+	else if (fov > 1)
+		fov -= speed;
+
+	resetProjectionMatrix();
+
 }
 
 Camera::~Camera() {

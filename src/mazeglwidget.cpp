@@ -12,6 +12,10 @@ MazeGLWidget::MazeGLWidget(QWidget *parent) : QOpenGLWidget(parent)
 	mazeGrid = new Algorithms();
 	mazeGrid->helper(10, 10);
 
+	updateTimer.setInterval(0);
+	connect(&updateTimer, SIGNAL(timeout()), this, SLOT(update()));
+	updateTimer.start();
+	
 }
 
 
@@ -37,9 +41,9 @@ void MazeGLWidget::initializeGL() {
 		QVector3D(0.0f, 0.0f, 1.0f),
 		QVector3D(0.0f, 0.0f, -1.0f),
 		QVector3D(0.0f, 1.0f, 0.0f),
-		100.0f, frameBufferWidth, frameBufferHeight, 0.1f, 100.f
+		100.0f, width(), height(), 0.1f, 100.f
 	);
-	camera->setSpeed(0.08);
+	camera->setSpeed(0.5);
 
 	playerObjShader = new ShaderProgram(this);
 	playerObjShader->loadShaders(
@@ -67,10 +71,7 @@ void MazeGLWidget::initializeGLfromGrid() {
 			mazeGrid->sx - mazeGrid->width / 2,
 			mazeGrid->sy - mazeGrid->height / 2, 0.1f
 		),
-		QVector3D(
-			(2.0 / (mazeGrid->width)),
-			(2.0 / (mazeGrid->width)), 0.1f
-		)
+		QVector3D(1.0, 1.0, 0.1f)
 	);
 
 	playerObject->setupGLBuffers();
@@ -91,11 +92,7 @@ void MazeGLWidget::initializeGLfromGrid() {
 					xyLocation[0] - mazeGrid->width / 2,
 					xyLocation[1] - mazeGrid->height / 2, 0
 				),
-				QVector3D(
-					(2.0 / (mazeGrid->width)),
-					(2.0 / (mazeGrid->width)),
-					.05f
-				)
+				QVector3D(1.0, 1.0, .05f)
 			);
 			obj->setupGLBuffers();
 			gameObjects->push_back(obj);
@@ -115,11 +112,7 @@ void MazeGLWidget::initializeGLfromGrid() {
 			mazeGrid->ex - mazeGrid->width / 2,
 			mazeGrid->ey - mazeGrid->height / 2, 0.0f
 		),
-		QVector3D(
-			(2.0 / (mazeGrid->width)),
-			(2.0 / (mazeGrid->width)),
-			0.05f
-		)
+		QVector3D(1.0, 1.0, 0.05f)
 	);
 	destinationObject->setupGLBuffers();
 	gameObjects->push_back(destinationObject);
@@ -129,14 +122,12 @@ void MazeGLWidget::initializeGLfromGrid() {
 
 
 void MazeGLWidget::paintGL() {
+
 	frame += 1;
 
 	glClearColor(0,0,0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	int side = qMin(width(), height());
-	glViewport((width() - side) / 2, (height() - side) / 2, side, side);
-
 	if (mazeGrid->solved) {
 		signalGameOver();
 		reset(mazeGrid->width, mazeGrid->height);
@@ -158,26 +149,22 @@ void MazeGLWidget::paintGL() {
 
 void MazeGLWidget::resizeGL(int width, int height)
 {
-	QSizeF designSize = QSizeF(width, height);
-	QSizeF scaledSize = QSizeF(size());
-
-	scaledSize.scale(designSize, Qt::KeepAspectRatioByExpanding);
-
-	frameBufferWidth = scaledSize.width();
-	frameBufferHeight = scaledSize.height();
-
-	aspect_ratio = frameBufferWidth*1.0 / frameBufferHeight;
-
-	camera->updateProjectionMatrix(frameBufferWidth, frameBufferHeight);
+	int side = qMin(width, height);
+	glViewport((width - side) / 2, (height - side) / 2, side, side);
+	camera->updateProjectionMatrix(side, side);
 }
 
 void MazeGLWidget::reset(unsigned int w, unsigned int h) {
 	qDebug() << "reset clicked" << w << " " << h;
 
+	updateTimer.stop();
+
 	mazeGrid->helper(w, h);
 	initializeGLfromGrid();
-	update();
+
 	this->setFocus();
+
+	updateTimer.start();
 }
 
 void MazeGLWidget::signalGameOver() {
@@ -190,5 +177,8 @@ void MazeGLWidget::keyPressEvent(QKeyEvent * event) {
 		gameObjects->at(i)->updateObject(frame, event, mazeGrid);
 	}
 
-	update();
+}
+
+void MazeGLWidget::wheelEvent(QWheelEvent * event) {
+	camera->update(event);
 }

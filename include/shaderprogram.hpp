@@ -8,7 +8,8 @@
 
 class ShaderProgram{
 	public:
-		
+
+		ShaderProgram();
 		ShaderProgram(QObject * parent);
 
 		QOpenGLShaderProgram * program;

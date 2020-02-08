@@ -1,5 +1,7 @@
 #include "shaderprogram.hpp"
 
+ShaderProgram::ShaderProgram(){}
+
 ShaderProgram::ShaderProgram(QObject *parent){
 	qDebug() << "Shader Created";
 	program = new QOpenGLShaderProgram(parent);
