@@ -59,11 +59,8 @@ void MazeGLWidget::initializeGLfromGrid() {
 	gameObjects = new vector<GameObject *>();
 
 
-	GameObject *playerObject = new PlayerObject(
-		false,
-		QString("://cubeObj"),
-		QVector3D(0.22, 0.557, 0.23)
-	);
+	GameObject *playerObject = new PlayerObject(false);
+	playerObject->loadObject(QString("://cubeObj"),QString("://cubeTexture"));
 	playerObject->setTranslation(QVector3D(mazeGrid->sx, mazeGrid->sy, 0));
 	playerObject->setupModelMatrix(
 		QVector3D(
@@ -87,11 +84,8 @@ void MazeGLWidget::initializeGLfromGrid() {
 	for (int i = 0; i < mazeGrid->width*mazeGrid->height; i++) {
 		xyLocation = mazeGrid->indexToxy(i);
 		if (mazeGrid->grid->at(i) == 1) {
-			GameObject *obj = new WallObject(
-				true,
-				QString("://cubeObj"),
-				QVector3D(0.961, 0.486, 0)
-			);
+			GameObject *obj = new WallObject(true);
+			obj->loadObject(QString("://cubeObj"), QString("://cubeTexture"));
 			obj->setupModelMatrix(
 				QVector3D(
 					xyLocation[0] - mazeGrid->width / 2,
@@ -112,11 +106,9 @@ void MazeGLWidget::initializeGLfromGrid() {
 	/*
 		INSTANSTIATE destination
 	*/
-	GameObject *destinationObject = new WallObject(
-		false,
-		QString("://cubeObj"),
-		QVector3D(0.098, 0.463, 0.824)
-	);
+	GameObject *destinationObject = new WallObject(false);
+	destinationObject->loadObject(QString("://cubeObj"),QString("://cubeTexture"));
+
 	destinationObject->setTranslation(QVector3D(mazeGrid->ex, mazeGrid->ey, 0));
 	destinationObject->setupModelMatrix(
 		QVector3D(

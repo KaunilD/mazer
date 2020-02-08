@@ -21,7 +21,7 @@ protected:
 
 	QMatrix4x4 * modelMatrix, *projectionMatrix;
 	QVector3D color;
-	unsigned int texture;
+	QOpenGLTexture * texture;
 	QVector3D translation;
 	QVector<Vertex> vertices;
 	QVector<GLsizei> indices;
@@ -38,7 +38,7 @@ protected:
 
 public:
 	GameObject();
-	GameObject(bool npc, const QString & filePath, QVector3D color);
+	GameObject(bool npc);
 	virtual ~GameObject();
 
 	QMatrix4x4 & getModelMatrix();

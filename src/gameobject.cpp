@@ -2,11 +2,9 @@
 
 GameObject::GameObject() {}
 
-GameObject::GameObject(bool npc, const QString & filePath, QVector3D _color):
-	npc(npc), translation(QVector3D(1.0f, 1.0f, 1.0f)), color(_color) {
+GameObject::GameObject(bool npc): npc(npc){
 
 	initializeOpenGLFunctions();
-	loadObject(filePath);
 }
 
 void GameObject::loadObject(const QString & filePath, const QString & textureImage) {
@@ -36,8 +34,7 @@ void GameObject::loadObject(const QString & filePath, const QString & textureIma
 				for (int i = 1; i < list.count(); i++) {
 					texture[i - 1] = list[i].toFloat();
 				}
-				//qDebug() << texture;
-				rawVertices.push_back(texture);
+				rawTextures.push_back(texture);
 			}
 			else if (list[0] == "vn" && !isTexture) {
 				QVector3D normal;
@@ -73,15 +70,9 @@ void GameObject::loadObject(const QString & filePath, const QString & textureIma
 		indices.push_back(i);
 	}
 
-	qDebug() << "ObjLoader:: Reading texture" << filePath;
+	qDebug() << "ObjLoader:: Reading texture" << textureImage;
 
-	QImage image(textureImage);
-	QImage t = convertToGLFormat(image);
-
-
-
-	
-
+	texture = new QOpenGLTexture(QImage(textureImage).mirrored());
 }
 
 
@@ -136,15 +127,13 @@ void GameObject::render(ShaderProgram * shaderProgram) {
 	indexBuffer.bind();
 	attributeBuffer.bind();
 	
+
+	texture->bind();
+
 	// POSITION
 	GLuint positionAttribLoc = shaderProgram->program->attributeLocation("vertex_position");
 	shaderProgram->program->enableAttributeArray(positionAttribLoc);
 	shaderProgram->program->setAttributeBuffer(positionAttribLoc, GL_FLOAT, (int)offsetof(Vertex, position), 3, sizeof(Vertex));
-
-	// COLOR
-	GLuint colorAttribLoc = shaderProgram->program->attributeLocation("vertex_color");
-	shaderProgram->program->enableAttributeArray(colorAttribLoc);
-	shaderProgram->program->setAttributeBuffer(colorAttribLoc, GL_FLOAT, (int)offsetof(Vertex, color), 3, sizeof(Vertex));
 
 	// NORMAL
 	GLuint normalAttribLoc = shaderProgram->program->attributeLocation("vertex_normal");
@@ -155,15 +144,18 @@ void GameObject::render(ShaderProgram * shaderProgram) {
 	GLuint textureAttribLoc = shaderProgram->program->attributeLocation("vertex_texture");
 	shaderProgram->program->enableAttributeArray(textureAttribLoc);
 	shaderProgram->program->setAttributeBuffer(textureAttribLoc, GL_FLOAT, (int)offsetof(Vertex, texture), 2, sizeof(Vertex));
-
-
+	
+	// COLOR
+	GLuint colorAttribLoc = shaderProgram->program->attributeLocation("vertex_color");
+	shaderProgram->program->enableAttributeArray(colorAttribLoc);
+	shaderProgram->program->setAttributeBuffer(colorAttribLoc, GL_FLOAT, (int)offsetof(Vertex, color), 3, sizeof(Vertex));
 
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 
 	glDisableVertexAttribArray(positionAttribLoc);
-	glDisableVertexAttribArray(colorAttribLoc);
 	glDisableVertexAttribArray(normalAttribLoc);
 	glDisableVertexAttribArray(textureAttribLoc);
+	glDisableVertexAttribArray(colorAttribLoc);
 
 }
 

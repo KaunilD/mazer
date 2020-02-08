@@ -1,12 +1,8 @@
 #include "gameobject/playerobject.hpp"
 
 
-PlayerObject::PlayerObject(bool npc, QString filePath, QVector3D color) :
-	GameObject(npc, filePath, color) {
-
+PlayerObject::PlayerObject(bool npc) : GameObject(npc) {
 	initializeOpenGLFunctions();
-	loadObject(filePath);
-
 }
 
 void PlayerObject::updateObject(
