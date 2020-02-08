@@ -149,9 +149,8 @@ void MazeGLWidget::paintGL() {
 
 void MazeGLWidget::resizeGL(int width, int height)
 {
-	int side = qMin(width, height);
-	glViewport((width - side) / 2, (height - side) / 2, side, side);
-	camera->updateProjectionMatrix(side, side);
+	glViewport(0, 0, width, height);
+	camera->updateProjectionMatrix(width, height);
 }
 
 void MazeGLWidget::reset(unsigned int w, unsigned int h) {

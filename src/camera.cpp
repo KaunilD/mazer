@@ -8,11 +8,8 @@ Camera::Camera(
 ): posVector(posVector), frontVector(frontVector), upVector(upVector), fov(fov), frameBufferWidth(fbW), frameBufferHeight(fbH), _near(near), _far(far) {
 	
 	viewMatrix = new QMatrix4x4();
-	viewMatrix->setToIdentity();
-
 	projectionMatrix = new QMatrix4x4();
-	projectionMatrix->setToIdentity();
-
+	
 	updateViewMatrix();
 	updateProjectionMatrix(fbW, fbH);
 }
@@ -48,10 +45,13 @@ void Camera::updateViewMatrix() {
 
 
 void Camera::updateProjectionMatrix(int _frameBufferWidth, int _frameBufferHeight) {
+	frameBufferWidth = _frameBufferWidth;
+	frameBufferHeight = _frameBufferHeight;
+
 	projectionMatrix->setToIdentity();
 	projectionMatrix->perspective(
 		fov,
-		_frameBufferWidth*1.0/_frameBufferHeight,
+		_frameBufferWidth/(float)_frameBufferHeight,
 		_near, _far
 	);
 }
@@ -60,7 +60,7 @@ void Camera::resetProjectionMatrix() {
 	projectionMatrix->setToIdentity();
 	projectionMatrix->perspective(
 		fov,
-		frameBufferWidth*1.0 / frameBufferHeight,
+		frameBufferWidth/ (float) frameBufferHeight,
 		_near, _far
 	);
 }
