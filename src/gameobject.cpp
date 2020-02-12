@@ -72,7 +72,7 @@ void GameObject::loadObject(const QString & filePath, const QString & textureIma
 
 	qDebug() << "ObjLoader:: Reading texture" << textureImage;
 
-	texture = new QOpenGLTexture(QImage(textureImage).mirrored());
+	texture = make_unique<QOpenGLTexture>(QImage(textureImage).mirrored());
 }
 
 
@@ -93,7 +93,7 @@ void GameObject::scale(QVector3D scale) {
 }
 
 void GameObject::setupModelMatrix(QVector3D _translate, QVector3D _scale) {
-	modelMatrix = new QMatrix4x4();
+	modelMatrix = make_unique<QMatrix4x4>();
 	modelMatrix->setToIdentity();
 	scale(_scale);
 	translate(_translate);
@@ -159,16 +159,13 @@ void GameObject::render(shared_ptr<ShaderProgram> & shaderProgram) {
 
 }
 
-const QMatrix4x4 * GameObject::getModelMatrix() const {
-	return modelMatrix;
+const QMatrix4x4 & GameObject::getModelMatrix() const {
+	return *modelMatrix;
 }
 
 GameObject::~GameObject() {
 	qDebug() << "GameObject destroyed";
 
-	delete modelMatrix;
-	delete texture;
-	
 	indexBuffer.destroy();
 	attributeBuffer.destroy();
 

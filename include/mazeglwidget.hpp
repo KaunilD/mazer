@@ -30,7 +30,7 @@ public:
 
 	vector<GameObject *> * gameObjects;
 	
-	Camera *camera;
+	unique_ptr<Camera> camera;
 	
 	void initializeGL() override;
 	void paintGL() override;

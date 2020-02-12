@@ -26,8 +26,6 @@ MazeGLWidget::~MazeGLWidget() {
 		delete gameObjects->at(i);
 	}
 	delete gameObjects;
-	delete camera;
-	
 }
 
 void MazeGLWidget::initializeGL() {
@@ -42,7 +40,7 @@ void MazeGLWidget::initializeGL() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	
-	camera = new Camera(
+	camera = make_unique<Camera>(
 		QVector3D(0.0f, 0.0f, 1.0f),
 		QVector3D(0.0f, 0.0f, -1.0f),
 		QVector3D(0.0f, 1.0f, 0.0f),
@@ -173,7 +171,6 @@ void MazeGLWidget::reset(unsigned int w, unsigned int h) {
 
 void MazeGLWidget::signalGameOver() {
 	emit gameOver();
-
 }
 
 void MazeGLWidget::keyPressEvent(QKeyEvent * event) {

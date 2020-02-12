@@ -1,7 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-
+#include "libs.hpp"
 #include <QMatrix4x4>
 #include <QVector3D>
 #include <QWheelEvent>
@@ -15,7 +15,7 @@ enum Movement {
 
 class Camera {
 protected:
-	QMatrix4x4 *projectionMatrix, *viewMatrix;
+	unique_ptr<QMatrix4x4> projectionMatrix, viewMatrix;
 
 public:
 	float fov;
@@ -44,8 +44,8 @@ public:
 
 	// view and projection matrices should be only modified from within the 
 	// class
-	const  QMatrix4x4 * getProjectionMatrix() const;
-	const QMatrix4x4 * getViewMatrix() const;
+	const  QMatrix4x4 & getProjectionMatrix() const;
+	const QMatrix4x4 & getViewMatrix() const;
 
 	void update(QWheelEvent *);
 };

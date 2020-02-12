@@ -20,9 +20,10 @@ class GameObject: protected QOpenGLFunctions {
 protected:
 	bool npc;
 
-	QMatrix4x4 * modelMatrix;
+	unique_ptr<QMatrix4x4> modelMatrix;
+	unique_ptr<QOpenGLTexture> texture;
+	
 	QVector3D color;
-	QOpenGLTexture * texture;
 	QVector3D translation;
 	QVector<Vertex> vertices;
 	QVector<GLsizei> indices;
@@ -42,7 +43,7 @@ public:
 	GameObject(bool npc);
 	virtual ~GameObject();
 
-	const QMatrix4x4 * getModelMatrix() const;
+	const QMatrix4x4 & getModelMatrix() const;
 	
 	void setupModelMatrix(QVector3D translate, QVector3D scale);
 	void scale(QVector3D scale);

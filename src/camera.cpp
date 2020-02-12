@@ -7,8 +7,8 @@ Camera::Camera(
 	float fov, int fbW, int fbH, float near, float far
 ): posVector(posVector), frontVector(frontVector), upVector(upVector), fov(fov), frameBufferWidth(fbW), frameBufferHeight(fbH), _near(near), _far(far) {
 	
-	viewMatrix = new QMatrix4x4();
-	projectionMatrix = new QMatrix4x4();
+	viewMatrix = make_unique<QMatrix4x4>();
+	projectionMatrix = make_unique<QMatrix4x4>();
 	
 	updateViewMatrix();
 	updateProjectionMatrix(fbW, fbH);
@@ -65,12 +65,12 @@ void Camera::resetProjectionMatrix() {
 	);
 }
 
-const QMatrix4x4 * Camera::getProjectionMatrix() const{
-	return projectionMatrix;
+const QMatrix4x4 & Camera::getProjectionMatrix() const{
+	return *projectionMatrix;
 }
 
-const QMatrix4x4 * Camera::getViewMatrix() const{
-	return viewMatrix;
+const QMatrix4x4 & Camera::getViewMatrix() const{
+	return *viewMatrix;
 }
 
 void Camera::update(QWheelEvent * event) {
@@ -84,6 +84,4 @@ void Camera::update(QWheelEvent * event) {
 }
 
 Camera::~Camera() {
-	delete projectionMatrix;
-	delete viewMatrix;
 }

@@ -9,8 +9,10 @@ Algorithms::Algorithms():directions({ {'N', 'E', 'W', 'S'} }) {
 
 Algorithms::~Algorithms() {
 	qDebug() << "Algorithms destroyed";
-	delete grid;
 }
+
+
+
 int Algorithms::randomInt(int max) {
 	srand(time(0));
 	return rand() % max;
@@ -40,8 +42,12 @@ bool Algorithms::inBounds(int x, int y) {
 	return true;
 }
 
+bool Algorithms::isFree(int x, int y) {
+	return grid->at(xyToIndex(x, y)) == 0;
+}
+
 bool Algorithms::helper(int w, int h) {
-	grid = new vector<int>(w*h, 1);
+	grid = make_unique<vector<int>>(w*h, 1);
 
 	width = w;
 	height = h;
@@ -90,7 +96,7 @@ void Algorithms::backtrackRecursively(int sx, int sy) {
 void Algorithms::printGrid() {
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
-			qDebug() << grid[xyToIndex(j, i)];
+			qDebug() << grid->at(xyToIndex(j, i));
 		}
 		qDebug() << "";
 	}

@@ -26,9 +26,9 @@ class ShaderProgram{
 
 		
 		void sendMatricesToShader(
-			const QMatrix4x4 * projectionMatrix, 
-			const QMatrix4x4 * viewMatrix, 
-			const QMatrix4x4 * modelMatrix
+			const QMatrix4x4 & projectionMatrix, 
+			const QMatrix4x4 & viewMatrix, 
+			const QMatrix4x4 & modelMatrix
 		);
 		void sendColorToShader(QVector3D color);
 		void sendMatricesToShader(Camera camera);

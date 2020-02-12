@@ -14,26 +14,26 @@ void PlayerObject::updateObject(
 
 	if (event->key() == Qt::Key_W) {
 	
-		if (mazeGrid->inBounds(x, y + 1) && mazeGrid->grid->at(mazeGrid->xyToIndex(x, y + 1)) == 0) {
+		if (mazeGrid->inBounds(x, y + 1) && mazeGrid->isFree(x, y + 1)) {
 			
 			modelMatrix->translate(QVector3D(0.0f, 1.0f, 0.0f));
 			translation += QVector3D(0.0f, 1.0f, 0.0f);
 		}
 	}
 	if (event->key() == Qt::Key_S) {
-		if (mazeGrid->inBounds(x, y - 1) && mazeGrid->grid->at(mazeGrid->xyToIndex(x, y - 1)) == 0) {
+		if (mazeGrid->inBounds(x, y - 1) && mazeGrid->isFree(x, y - 1)) {
 			modelMatrix->translate(QVector3D(0.0f, -1.0f, 0.0f));
 			translation += QVector3D(0.0f, -1.0f, 0.0f);
 		}
 	}
 	if (event->key() == Qt::Key_A) {
-		if (mazeGrid->inBounds(x - 1, y) && mazeGrid->grid->at(mazeGrid->xyToIndex(x - 1, y)) == 0) {
+		if (mazeGrid->inBounds(x - 1, y) && mazeGrid->isFree(x - 1, y)) {
 			modelMatrix->translate(QVector3D(-1.0f, 0.0f, 0.0f));
 			translation += QVector3D(-1.0f, 0.0f, 0.0f);
 		}
 	}
 	if (event->key() == Qt::Key_D) {
-		if (mazeGrid->inBounds(x + 1, y) && mazeGrid->grid->at(mazeGrid->xyToIndex(x + 1, y)) == 0) {
+		if (mazeGrid->inBounds(x + 1, y) && mazeGrid->isFree(x + 1, y)) {
 			modelMatrix->translate(QVector3D(1.0f, 0.0f, 0.0f));
 			translation += QVector3D(1.0f, 0.0f, 0.0f);
 		}
