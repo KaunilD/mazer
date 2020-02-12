@@ -36,4 +36,4 @@ s - down
 a - left
 d - right
 ```
-
+You can adjust the field of view using the mouse wheel. Depending upon the screen resolution you might have a zoomed in render at the beginning.
