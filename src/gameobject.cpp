@@ -159,12 +159,15 @@ void GameObject::render(ShaderProgram * shaderProgram) {
 
 }
 
-QMatrix4x4 & GameObject::getModelMatrix() {
-	return *modelMatrix;
+const QMatrix4x4 * GameObject::getModelMatrix() const {
+	return modelMatrix;
 }
 
 GameObject::~GameObject() {
-
+	
+	delete modelMatrix;
+	delete texture;
+	
 	indexBuffer.destroy();
 	attributeBuffer.destroy();
 

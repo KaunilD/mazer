@@ -34,17 +34,22 @@ bool ShaderProgram::activate() {
 	return false;
 }
 
-void ShaderProgram::sendMatricesToShader(QMatrix4x4 projectionMatrix, QMatrix4x4 viewMatrix, QMatrix4x4 modelMatrix) {
+void ShaderProgram::sendMatricesToShader(const QMatrix4x4 * projectionMatrix, const QMatrix4x4 * viewMatrix, const QMatrix4x4 * modelMatrix) {
 	program->setUniformValue(
 		this->projectionMatrix,
-		projectionMatrix
+		*projectionMatrix
 	);
 	program->setUniformValue(
 		this->viewMatrix,
-		viewMatrix
+		*viewMatrix
 	);
 	program->setUniformValue(
 		this->modelMatrix,
-		modelMatrix
+		*modelMatrix
 	);
+}
+
+
+ShaderProgram::~ShaderProgram() {
+	delete program;
 }

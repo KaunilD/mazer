@@ -65,12 +65,12 @@ void Camera::resetProjectionMatrix() {
 	);
 }
 
-QMatrix4x4 Camera::getProjectionMatrix() {
-	return *projectionMatrix;
+const QMatrix4x4 * Camera::getProjectionMatrix() const{
+	return projectionMatrix;
 }
 
-QMatrix4x4 Camera::getViewMatrix() {
-	return *viewMatrix;
+const QMatrix4x4 * Camera::getViewMatrix() const{
+	return viewMatrix;
 }
 
 void Camera::update(QWheelEvent * event) {
@@ -84,5 +84,6 @@ void Camera::update(QWheelEvent * event) {
 }
 
 Camera::~Camera() {
-
+	delete projectionMatrix;
+	delete viewMatrix;
 }

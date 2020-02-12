@@ -20,9 +20,15 @@ MazeGLWidget::MazeGLWidget(QWidget *parent) : QOpenGLWidget(parent)
 
 
 MazeGLWidget::~MazeGLWidget() {
+
+	makeCurrent();
 	for (int i = 0; i < gameObjects->size(); i++) {
 		delete gameObjects->at(i);
 	}
+	delete gameObjects; delete playerObjShader;
+	delete mazeGrid;
+	delete camera;
+	
 }
 
 void MazeGLWidget::initializeGL() {

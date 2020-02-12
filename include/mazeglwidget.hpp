@@ -28,9 +28,9 @@ public:
 	ShaderProgram * playerObjShader;
 
 	Algorithms * mazeGrid;
-	vector<GameObject *> * mazeBlocks;
+
 	vector<GameObject *> * gameObjects;
-	QMatrix4x4 * projectionMatrix, *viewMatrix;
+	
 	Camera *camera;
 	
 	void initializeGL() override;

@@ -14,6 +14,9 @@ enum Movement {
 };
 
 class Camera {
+protected:
+	QMatrix4x4 *projectionMatrix, *viewMatrix;
+
 public:
 	float fov;
 	float _near;
@@ -22,8 +25,6 @@ public:
 	int frameBufferWidth, frameBufferHeight;
 
 	double speed;
-
-	QMatrix4x4 *projectionMatrix, *viewMatrix;
 
 	QVector3D posVector, upVector, frontVector;
 
@@ -41,8 +42,10 @@ public:
 	void updateProjectionMatrix(int frameBufferWidth, int frameBufferHeight);
 	void resetProjectionMatrix();
 
-	QMatrix4x4 getProjectionMatrix();
-	QMatrix4x4 getViewMatrix();
+	// view and projection matrices should be only modified from within the 
+	// class
+	const  QMatrix4x4 * getProjectionMatrix() const;
+	const QMatrix4x4 * getViewMatrix() const;
 
 	void update(QWheelEvent *);
 };

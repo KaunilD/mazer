@@ -13,13 +13,14 @@
 #include <QKeyEvent>
 #include <QImage>
 #include <QOpenGLTexture>
+
 class GameObject: protected QOpenGLFunctions {
 
 
 protected:
 	bool npc;
 
-	QMatrix4x4 * modelMatrix, *projectionMatrix;
+	QMatrix4x4 * modelMatrix;
 	QVector3D color;
 	QOpenGLTexture * texture;
 	QVector3D translation;
@@ -41,8 +42,7 @@ public:
 	GameObject(bool npc);
 	virtual ~GameObject();
 
-	QMatrix4x4 & getModelMatrix();
-	QMatrix4x4 & getProjectionMatrix();
+	const QMatrix4x4 * getModelMatrix() const;
 	
 	void setupModelMatrix(QVector3D translate, QVector3D scale);
 	void scale(QVector3D scale);
