@@ -22,7 +22,7 @@
    cd mazer/
    mkdir build
    cd build
-   make ..
+   cmake ..
    make install
    ```
 
