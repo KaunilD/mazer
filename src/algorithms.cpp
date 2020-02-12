@@ -8,6 +8,7 @@ Algorithms::Algorithms():directions({ {'N', 'E', 'W', 'S'} }) {
 }
 
 Algorithms::~Algorithms() {
+	qDebug() << "Algorithms destroyed";
 	delete grid;
 }
 int Algorithms::randomInt(int max) {

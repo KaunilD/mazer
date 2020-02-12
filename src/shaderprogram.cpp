@@ -4,7 +4,7 @@ ShaderProgram::ShaderProgram(){}
 
 ShaderProgram::ShaderProgram(QObject *parent){
 	qDebug() << "Shader Created";
-	program = new QOpenGLShaderProgram(parent);
+	program = make_unique<QOpenGLShaderProgram>(parent);
 
 };
 
@@ -51,5 +51,4 @@ void ShaderProgram::sendMatricesToShader(const QMatrix4x4 * projectionMatrix, co
 
 
 ShaderProgram::~ShaderProgram() {
-	delete program;
 }

@@ -55,10 +55,10 @@ public:
 	
 	
 	void setupGLBuffers();
-	void render(ShaderProgram * shaderProgram);
+	void render(shared_ptr<ShaderProgram> & shaderProgram);
 	void loadObject(const QString & objFile, const QString & textureImage);
 
-	virtual void updateObject(int frames, QKeyEvent * event, Algorithms * mazeGrid) = 0;
+	virtual void updateObject(int frames, QKeyEvent * event, const shared_ptr<Algorithms> & mazeGrid) = 0;
 
 
 	};

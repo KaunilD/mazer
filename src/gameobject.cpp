@@ -118,11 +118,11 @@ void GameObject::setupGLBuffers() {
 
 }
 
-void GameObject::updateObject(int frame, QKeyEvent * event, Algorithms * mazeGrid) {
+void GameObject::updateObject(int frame, QKeyEvent * event, const shared_ptr<Algorithms> & mazeGrid) {
 
 }
 
-void GameObject::render(ShaderProgram * shaderProgram) {
+void GameObject::render(shared_ptr<ShaderProgram> & shaderProgram) {
 
 	indexBuffer.bind();
 	attributeBuffer.bind();
@@ -164,7 +164,8 @@ const QMatrix4x4 * GameObject::getModelMatrix() const {
 }
 
 GameObject::~GameObject() {
-	
+	qDebug() << "GameObject destroyed";
+
 	delete modelMatrix;
 	delete texture;
 	

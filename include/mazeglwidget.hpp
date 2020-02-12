@@ -1,19 +1,18 @@
 #ifndef MAZEGLWIDGET_H
 #define MAZEGLWIDGET_H
-// shaderprogram
-#include "shaderprogram.hpp"
 // Qt
-
 #include <QKeyEvent>
 #include <QWidget>
 #include <QTimer>
 #include <QOpenGLWidget>
-// algorithms
+// yours truly
 #include "gameobject/gameobject.hpp"
 #include "gameobject/playerobject.hpp"
 #include "gameobject/wallobject.hpp"
 #include "algorithms.hpp"
 #include "camera.hpp"
+#include "libs.hpp"
+#include "shaderprogram.hpp"
 
 class MazeGLWidget : public QOpenGLWidget, protected QAbstractOpenGLFunctions
 {
@@ -25,9 +24,9 @@ public:
 	~MazeGLWidget();
 
 
-	ShaderProgram * playerObjShader;
+	shared_ptr<ShaderProgram> playerObjShader;
 
-	Algorithms * mazeGrid;
+	shared_ptr<Algorithms> mazeGrid;
 
 	vector<GameObject *> * gameObjects;
 	

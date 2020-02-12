@@ -9,7 +9,7 @@ MazeGLWidget::MazeGLWidget(QWidget *parent) : QOpenGLWidget(parent)
 
 	this->setFocus();
 
-	mazeGrid = new Algorithms();
+	mazeGrid = make_shared<Algorithms>();
 	mazeGrid->helper(10, 10);
 
 	updateTimer.setInterval(0);
@@ -25,8 +25,7 @@ MazeGLWidget::~MazeGLWidget() {
 	for (int i = 0; i < gameObjects->size(); i++) {
 		delete gameObjects->at(i);
 	}
-	delete gameObjects; delete playerObjShader;
-	delete mazeGrid;
+	delete gameObjects;
 	delete camera;
 	
 }
@@ -51,7 +50,7 @@ void MazeGLWidget::initializeGL() {
 	);
 	camera->setSpeed(0.5);
 
-	playerObjShader = new ShaderProgram(this);
+	playerObjShader = make_unique<ShaderProgram>(this);
 	playerObjShader->loadShaders(
 		":/vertexShader",
 		":/fragShader"

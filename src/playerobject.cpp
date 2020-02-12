@@ -6,7 +6,7 @@ PlayerObject::PlayerObject(bool npc) : GameObject(npc) {
 }
 
 void PlayerObject::updateObject(
-	int frames, QKeyEvent * event, Algorithms * mazeGrid
+	int frames, QKeyEvent * event, const shared_ptr<Algorithms> & mazeGrid
 ) {
 	int x = translation[0];
 	int y = translation[1];

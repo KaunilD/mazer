@@ -6,7 +6,7 @@ class PlayerObject : public GameObject{
 
 public:
 	PlayerObject(bool npc);
-	virtual void updateObject(int frames, QKeyEvent * event, Algorithms * mazeGrid);
+	virtual void updateObject(int frames, QKeyEvent * event, const shared_ptr<Algorithms> & mazeGrid);
 };
 
 #endif

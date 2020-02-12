@@ -13,7 +13,7 @@ class ShaderProgram{
 		ShaderProgram(QObject * parent);
 		~ShaderProgram();
 
-		QOpenGLShaderProgram * program;
+		unique_ptr<QOpenGLShaderProgram> program;
 
 		GLuint modelMatrix;
 		GLuint viewMatrix;
