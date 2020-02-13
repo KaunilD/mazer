@@ -1,10 +1,6 @@
 #ifndef MAZEGLWIDGET_H
 #define MAZEGLWIDGET_H
-// Qt
-#include <QKeyEvent>
-#include <QWidget>
-#include <QTimer>
-#include <QOpenGLWidget>
+
 // yours truly
 #include "gameobject/gameobject.hpp"
 #include "gameobject/playerobject.hpp"
@@ -29,7 +25,6 @@ public:
 	shared_ptr<Algorithms> mazeGrid;
 
 	vector<GameObject *> * gameObjects;
-	
 	unique_ptr<Camera> camera;
 	
 	void initializeGL() override;

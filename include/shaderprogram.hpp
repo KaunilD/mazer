@@ -3,8 +3,6 @@
 
 #include "libs.hpp"
 #include "camera.hpp"
-#include <QOpenGLShaderProgram>
-#include <QObject>
 
 class ShaderProgram{
 	public:

@@ -2,9 +2,6 @@
 #define CAMERA_H
 
 #include "libs.hpp"
-#include <QMatrix4x4>
-#include <QVector3D>
-#include <QWheelEvent>
 
 enum Movement {
 	W,
@@ -40,7 +37,7 @@ public:
 
 	void updateViewMatrix();
 	void updateProjectionMatrix(int frameBufferWidth, int frameBufferHeight);
-	void resetProjectionMatrix();
+	void reComputeProjectionMatrix();
 
 	// view and projection matrices should be only modified from within the 
 	// class

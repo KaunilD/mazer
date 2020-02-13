@@ -60,6 +60,7 @@ set(HEADERS
 	${PROJECT_SOURCE_DIR}/include/gameobject/wallobject.hpp
 	${PROJECT_SOURCE_DIR}/include/gameobject/playerobject.hpp
 	${PROJECT_SOURCE_DIR}/include/camera.hpp
+	${PROJECT_SOURCE_DIR}/include/libs.hpp
 )
 
 qt5_wrap_ui(ui_wrap ${UI})

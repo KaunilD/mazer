@@ -1,6 +1,6 @@
 #ifndef LIBS_H
 #define LIBS_H
-
+// c==/stl
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -13,12 +13,25 @@
 #include <random>
 #include <ctime>
 #include <cstdlib>
+// Qt
+#include <QMatrix4x4>
+#include <QVector3D>
+#include <QWheelEvent>
+#include <QKeyEvent>
+#include <QWidget>
+#include <QTimer>
+#include <QOpenGLWidget>
+#include <QOpenGLShaderProgram>
+#include <QObject>
+#include <QDialog>
+#include <QMessageBox>
+#include <QMainWindow>
 
 using std::unique_ptr;
 using std::shared_ptr;
+using std::weak_ptr;
 using std::make_unique;
 using std::make_shared;
-
 using std::vector;
 using std::cout;
 using std::endl;

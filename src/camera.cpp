@@ -4,8 +4,8 @@ Camera::Camera(){}
 
 Camera::Camera(
 	QVector3D posVector, QVector3D frontVector, QVector3D upVector, 
-	float fov, int fbW, int fbH, float near, float far
-): posVector(posVector), frontVector(frontVector), upVector(upVector), fov(fov), frameBufferWidth(fbW), frameBufferHeight(fbH), _near(near), _far(far) {
+	float fov, int fbW, int fbH, float Cnear, float Cfar
+): posVector(posVector), frontVector(frontVector), upVector(upVector), fov(fov), frameBufferWidth(fbW), frameBufferHeight(fbH), _near(Cnear), _far(Cfar) {
 	
 	viewMatrix = make_unique<QMatrix4x4>();
 	projectionMatrix = make_unique<QMatrix4x4>();
@@ -48,15 +48,10 @@ void Camera::updateProjectionMatrix(int _frameBufferWidth, int _frameBufferHeigh
 	frameBufferWidth = _frameBufferWidth;
 	frameBufferHeight = _frameBufferHeight;
 
-	projectionMatrix->setToIdentity();
-	projectionMatrix->perspective(
-		fov,
-		_frameBufferWidth/(float)_frameBufferHeight,
-		_near, _far
-	);
+	reComputeProjectionMatrix();
 }
 
-void Camera::resetProjectionMatrix() {
+void Camera::reComputeProjectionMatrix() {
 	projectionMatrix->setToIdentity();
 	projectionMatrix->perspective(
 		fov,
@@ -74,12 +69,13 @@ const QMatrix4x4 & Camera::getViewMatrix() const{
 }
 
 void Camera::update(QWheelEvent * event) {
+	
 	if (event->delta() < 0)
 		fov += speed;
 	else if (fov > 1)
 		fov -= speed;
 
-	resetProjectionMatrix();
+	reComputeProjectionMatrix();
 
 }
 
