@@ -1,4 +1,5 @@
 ## Mazer
+#### This engine has gone severe refactoring PS: https://github.com/KaunilD/particle_attractor
 
 ![screenshot](./src/resources/screen.png)
 
